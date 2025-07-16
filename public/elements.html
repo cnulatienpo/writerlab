@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Writer Lab Elements</title>
+  <title>Projects from the Projects</title>
   <style>
     body {
       background: #23282e;
@@ -100,7 +100,7 @@
   </style>
 </head>
 <body>
-  <h1>Writer Lab Elements</h1>
+  <h1>Literary Deviousness</h1>
   <button id="drafting-area" class="da" onclick="goTo('drafting')">Drafting Area</button>
   <div class="element-table">
     <button class="element fo unlocked" onclick="goTo('foundation')">
@@ -127,19 +127,52 @@
       <span class="abbr">Ch</span>
       <span class="name">Change</span>
     </button>
-    <button class="element se locked">
+    <button class="element se unlocked" onclick="goTo('scene')">
       <span class="abbr">SE</span>
       <span class="name">Scene Enders</span>
     </button>
-    <button class="element pa locked">
+    <button class="element pa unlocked" onclick="goTo('pacing')">
       <span class="abbr">Pa</span>
       <span class="name">Pacing</span>
     </button>
   </div>
   <script>
-    function goTo(element) {
-      // Navigate to the corresponding HTML page
-      window.location.href = element + '.html';
+    async function goTo(element) {
+      // Fetch the content dynamically from the corresponding file
+      const response = await fetch(`/definitions/${element} def.txt`);
+      if (response.ok) {
+        const content = await response.text();
+        // Create a new page to display the content
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>${element} Definition</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+              }
+              pre {
+                background: #f4f4f4;
+                padding: 10px;
+                border-radius: 5px;
+                overflow-x: auto;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${element} Definition</h1>
+            <pre>${content}</pre>
+          </body>
+          </html>
+        `);
+      } else {
+        alert('Failed to load content.');
+      }
     }
   </script>
   
