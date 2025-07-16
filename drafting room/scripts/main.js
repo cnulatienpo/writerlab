@@ -1,5 +1,142 @@
 // Project management for Drafting Room
 
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBi23iRWj7rE4gMssuoKx8NxO5cdnUNj7E",
+  authDomain: "pfp-data-14b9a.firebaseapp.com",
+  projectId: "pfp-data-14b9a",
+  storageBucket: "pfp-data-14b9a.firebasestorage.app",
+  messagingSenderId: "932276405722",
+  appId: "1:932276405722:web:d9cd4cc1a5a4856ee82ce3",
+  measurementId: "G-DGYDTSHHV8"
+};
+
+// Initialize Firebase (using compat version)
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Function to save user to Google Sheet
+async function saveUserToSheet(user) {
+  const userData = {
+    user_id: user.uid,
+    email: user.email,
+    tokens_current: 0,
+    tokens_total: 0,
+    tokens_spent: 0,
+    last_refill_date: new Date().toISOString(),
+    role: "user",
+    created_at: new Date().toISOString(),
+    notes: ""
+  };
+  try {
+    const response = await fetch(SHEETDB_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: userData })
+    });
+    const result = await response.json();
+    console.log("Saved user to sheet:", result);
+  } catch (err) {
+    console.error("Error saving to sheet:", err.message);
+  }
+}
+
+// Function to fetch user data from Google Sheet
+async function getUserFromSheet(user_id) {
+  try {
+    // SheetDB lets you filter like this: /search?user_id=VALUE
+    const response = await fetch(`${SHEETDB_URL}/search?user_id=${user_id}`);
+    const data = await response.json();
+    
+    if (data.length > 0) {
+      // Found the user
+      const userRow = data[0];
+      console.log("Fetched user:", userRow);
+      return userRow;
+    } else {
+      // No user found
+      console.log("No user found with id:", user_id);
+      return null;
+    }
+  } catch (err) {
+    console.error("Error fetching user from sheet:", err.message);
+    return null;
+  }
+}
+
+// Firebase Authentication functions
+async function signUp(email, password) {
+  try {
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+    console.log("Signed up:", user.uid, user.email);
+    // Add this:
+    await saveUserToSheet(user);
+    return user;
+  } catch (error) {
+    console.error("Signup error:", error.message);
+  }
+}
+
+async function logIn(email, password) {
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+    console.log("Logged in:", user.uid, user.email);
+    
+    // Fetch user's token data from Google Sheet
+    const userRow = await getUserFromSheet(user.uid);
+    if (userRow) {
+      console.log("Current tokens:", userRow.tokens_current);
+      // You can store this in a global variable or use it in your app
+      window.currentUserData = userRow;
+    } else {
+      console.log("User not found in sheet - might need to be saved first");
+    }
+    
+    return user;
+  } catch (error) {
+    console.error("Login error:", error.message);
+  }
+}
+
+// SheetDB and Firebase Authentication
+const SHEETDB_URL = "https://sheetdb.io/api/v1/14f5e5la3laxh";
+
+async function testSheetDB() {
+  const testData = {
+    user_id: "testuser",
+    email: "test@example.com", 
+    tokens_current: 0,
+    tokens_total: 0,
+    tokens_spent: 0,
+    last_refill_date: new Date().toISOString(),
+    role: "user",
+    created_at: new Date().toISOString(),
+    notes: "test row"
+  };
+
+  try {
+    const response = await fetch(SHEETDB_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: testData })
+    });
+    
+    const result = await response.json();
+    console.log("Test row saved:", result);
+  } catch (err) {
+    console.error("Error saving to sheet:", err.message);
+  }
+}
+
+// Call the test function
+testSheetDB();
+
 // Grab DOM elements
 const projectList = document.getElementById('project-list');
 const createProjectBtn = document.getElementById('create-project');
