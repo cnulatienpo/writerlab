@@ -66,6 +66,71 @@ async function getUserFromSheet(user_id) {
   }
 }
 
+// Function to update user tokens in Google Sheet
+async function updateUserTokens(user_id, newTokenValue) {
+  try {
+    // SheetDB PATCH endpoint, filter by user_id
+    const url = `${SHEETDB_URL}/user_id/${user_id}`;
+    const data = {
+      tokens_current: newTokenValue
+    };
+    
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data })
+    });
+    
+    const result = await response.json();
+    console.log("Updated tokens:", result);
+    return result;
+  } catch (err) {
+    console.error("Error updating tokens:", err.message);
+    return null;
+  }
+}
+
+// Function to spend tokens for a user
+async function spendTokens(user_id, amount) {
+  // 1. Fetch current user data
+  const userRow = await getUserFromSheet(user_id);
+  if (!userRow) {
+    console.log("User not found.");
+    return;
+  }
+
+  // 2. Check if they have enough tokens
+  const currentTokens = parseInt(userRow.tokens_current, 10) || 0;
+  if (currentTokens < amount) {
+    console.log("Not enough tokens.");
+    return;
+  }
+
+  // 3. Subtract and update tokens
+  const newTokenValue = currentTokens - amount;
+  await updateUserTokens(user_id, newTokenValue);
+
+  // (Optional) Update tokens_spent and tokens_total
+  const newTokensSpent = (parseInt(userRow.tokens_spent, 10) || 0) + amount;
+  const url = `${SHEETDB_URL}/user_id/${user_id}`;
+  
+  try {
+    await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: { tokens_spent: newTokensSpent } })
+    });
+  } catch (err) {
+    console.error("Error updating tokens_spent:", err.message);
+  }
+
+  console.log(`Spent ${amount} tokens. New balance: ${newTokenValue}`);
+}
+
 // Firebase Authentication functions
 async function signUp(email, password) {
   try {
