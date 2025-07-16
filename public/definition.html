@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Literary Deviousness - Definition</title>
+  <style>
+    body {
+      background: #23282e;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #facc15;
+      font-size: 2em;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .back-button {
+      background: linear-gradient(135deg, #6ba7e8 80%, #e4f4ff 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-bottom: 20px;
+      transition: transform 0.2s;
+    }
+    .back-button:hover {
+      transform: scale(1.05);
+    }
+    .content {
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      white-space: pre-wrap;
+      font-size: 1.1em;
+    }
+    .error {
+      color: #ff6b6b;
+      text-align: center;
+      font-size: 1.2em;
+    }
+    .loading {
+      text-align: center;
+      color: #facc15;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="back-button" onclick="history.back()">← Back to Literary Deviousness</button>
+    <h1 id="title">Loading...</h1>
+    <div id="content" class="content loading">Loading definition...</div>
+  </div>
+
+  <script>
+    // Get the filename from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const filename = urlParams.get('file');
+    
+    if (!filename) {
+      document.getElementById('title').textContent = 'Error';
+      document.getElementById('content').innerHTML = '<div class="error">No file specified</div>';
+    } else {
+      // Set the title
+      document.getElementById('title').textContent = formatTitle(filename);
+      
+      // Load the content
+      loadDefinition(filename);
+    }
+    
+    function formatTitle(filename) {
+      // Remove file extension and capitalize
+      let title = filename.replace(/\.(txt|md|jsx)$/, '');
+      return title.charAt(0).toUpperCase() + title.slice(1);
+    }
+    
+    async function loadDefinition(filename) {
+      try {
+        const response = await fetch(`/definitions/${encodeURIComponent(filename)}`);
+        if (response.ok) {
+          const content = await response.text();
+          document.getElementById('content').textContent = content;
+        } else {
+          document.getElementById('content').innerHTML = '<div class="error">Definition not found</div>';
+        }
+      } catch (error) {
+        document.getElementById('content').innerHTML = '<div class="error">Error loading definition</div>';
+        console.error('Error loading definition:', error);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -10,6 +10,9 @@ const https = require('https');
 
 const app = express();
 
+// Trust proxy for rate limiting in development/cloud environments
+app.set('trust proxy', 1);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Global rate limit: 100 requests per minute per IP
@@ -30,6 +33,32 @@ app.use(express.static('public'));
 app.use('/auth', authRoutes);
 app.use(express.static(path.join(__dirname, 'views')));
 app.use('/games', express.static(path.join(__dirname, 'games')));
+
+// Serve drafting room
+app.get('/drafting room', (req, res) => {
+  res.sendFile(path.join(__dirname, 'drafting room', 'index.html'));
+});
+
+app.get('/drafting-room', (req, res) => {
+  res.sendFile(path.join(__dirname, 'drafting room', 'index.html'));
+});
+
+// Serve drafting room static files
+app.use('/drafting room', express.static(path.join(__dirname, 'drafting room')));
+app.use('/drafting-room', express.static(path.join(__dirname, 'drafting room')));
+
+// Serve definition files
+app.get('/definitions/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'definitions', filename);
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading definition file:', err);
+      return res.status(404).send('Definition not found');
+    }
+    res.send(data);
+  });
+});
 
 // Serve writer type profiles
 app.get('/profile/:type', (req, res) => {

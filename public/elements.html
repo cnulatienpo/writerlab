@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Writer Lab Elements</title>
+  <title>Literary Deviousness</title>
   <style>
     body {
       background: #23282e;
@@ -10,76 +10,68 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       color: #fff;
+      padding: 20px;
     }
     h1 {
       margin-bottom: 24px;
       font-size: 1.8em;
       font-weight: 700;
     }
-    .element-table {
+    .element-grid {
       background: rgba(255,255,255,0.06);
       border-radius: 18px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
       padding: 36px;
       display: grid;
-      grid-template-columns: repeat(4, 120px);
-      grid-template-rows: repeat(3, 120px);
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      width: 100%;
     }
     .element {
       border-radius: 16px;
       box-shadow: 0 2px 16px 0 rgba(31, 38, 135, 0.10);
       position: relative;
-      padding: 16px 14px 12px 14px;
+      padding: 16px;
       color: #fff;
       cursor: pointer;
-      font-size: 1.18em;
+      font-size: 1.1em;
       transition: transform 0.12s, box-shadow 0.12s;
       user-select: none;
       border: none;
       outline: none;
+      text-align: left;
+      background: linear-gradient(135deg, #6ba7e8 80%, #e4f4ff 100%);
     }
-    .element.unlocked:hover {
+    .element:hover {
       transform: scale(1.04);
       box-shadow: 0 8px 24px 0 rgba(31, 38, 135, 0.18);
       z-index: 2;
     }
-    .element.locked {
-      opacity: 0.38;
-      filter: grayscale(0.55) blur(0.3px);
-      cursor: not-allowed;
-    }
-    .abbr {
+    .element-number {
       position: absolute;
-      top: 14px;
-      left: 15px;
-      font-size: 1.08em;
+      top: 8px;
+      right: 12px;
+      font-size: 0.9em;
       font-weight: 700;
-      letter-spacing: 1px;
-      opacity: 0.90;
+      opacity: 0.7;
     }
-    .name {
-      position: absolute;
-      bottom: 15px;
-      left: 15px;
-      right: 15px;
-      font-size: 1.08em;
-      font-weight: 400;
-      opacity: 0.97;
+    .element-title {
+      font-weight: 600;
+      margin-bottom: 4px;
     }
-    .fo { background: linear-gradient(135deg, #e8ca6a 80%, #fffbe4 100%); }
-    .ch { background: linear-gradient(135deg, #b59be8 80%, #f3e9ff 100%); }
-    .di { background: linear-gradient(135deg, #88c7b0 80%, #e4fff4 100%); }
-    .po { background: linear-gradient(135deg, #6ba7e8 80%, #e4f4ff 100%); }
-    .cd { background: linear-gradient(135deg, #968ce8 80%, #eee8ff 100%); }
-    .ss { background: linear-gradient(135deg, #edbe7b 80%, #fff4e4 100%); }
-    .se { background: linear-gradient(135deg, #e89b9b 80%, #ffe4e4 100%); }
-    .pa { background: linear-gradient(135deg, #85c9b3 80%, #e4fff8 100%); }
-    .da { background: linear-gradient(135deg, #6bdbbd 80%, #e4fff8 100%); }
+    .section-header {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 1.3em;
+      font-weight: 700;
+      margin: 20px 0 10px 0;
+      color: #facc15;
+    }
     #drafting-area {
       position: fixed;
       left: 24px;
@@ -92,6 +84,7 @@
       cursor: pointer;
       border: none;
       color: #fff;
+      background: linear-gradient(135deg, #6bdbbd 80%, #e4fff8 100%);
     }
     #drafting-area:hover {
       transform: translateY(-50%) scale(1.04);
@@ -100,46 +93,402 @@
   </style>
 </head>
 <body>
-  <h1>Writer Lab Elements</h1>
-  <button id="drafting-area" class="da" onclick="goTo('drafting')">Drafting Area</button>
-  <div class="element-table">
-    <button class="element fo unlocked" onclick="goTo('foundation')">
-      <span class="abbr">Fo</span>
-      <span class="name">Foundation</span>
+  <h1>Literary Deviousness</h1>
+  <button id="drafting-area" onclick="goTo('drafting')">Drafting Area</button>
+  <div class="element-grid">
+    
+    <!-- Core Elements -->
+    <button class="element" onclick="goToDefinition('desire def.txt')">
+      <span class="element-number">1</span>
+      <div class="element-title">Desire</div>
     </button>
-    <button class="element ch unlocked" onclick="goTo('desire')">
-      <span class="abbr">De</span>
-      <span class="name">Desire</span>
+    <button class="element" onclick="goToDefinition('stakes def.txt')">
+      <span class="element-number">2</span>
+      <div class="element-title">Stakes</div>
     </button>
-    <button class="element di unlocked" onclick="goTo('stakes')">
-      <span class="abbr">St</span>
-      <span class="name">Stakes</span>
+    <button class="element" onclick="goToDefinition('CONFLICT.txt')">
+      <span class="element-number">3</span>
+      <div class="element-title">Conflict</div>
     </button>
-    <button class="element po unlocked" onclick="goTo('conflict')">
-      <span class="abbr">Co</span>
-      <span class="name">Conflict</span>
+    <button class="element" onclick="goToDefinition('decision def.txt')">
+      <span class="element-number">4</span>
+      <div class="element-title">Decision</div>
     </button>
-    <button class="element cd unlocked" onclick="goTo('decision')">
-      <span class="abbr">De</span>
-      <span class="name">Decision</span>
+    <button class="element" onclick="goToDefinition('change definition.txt')">
+      <span class="element-number">5</span>
+      <div class="element-title">Change</div>
     </button>
-    <button class="element ss unlocked" onclick="goTo('change')">
-      <span class="abbr">Ch</span>
-      <span class="name">Change</span>
+    <button class="element" onclick="goToDefinition('outcome')">
+      <span class="element-number">6</span>
+      <div class="element-title">Outcome</div>
     </button>
-    <button class="element se locked">
-      <span class="abbr">SE</span>
-      <span class="name">Scene Enders</span>
+
+    <!-- Characters Section -->
+    <div class="section-header">Characters</div>
+    <button class="element" onclick="goToDefinition('character backstory')">
+      <span class="element-number">7</span>
+      <div class="element-title">Character Backstory</div>
     </button>
-    <button class="element pa locked">
-      <span class="abbr">Pa</span>
-      <span class="name">Pacing</span>
+    <button class="element" onclick="goToDefinition('character body logic')">
+      <span class="element-number">8</span>
+      <div class="element-title">Character Body Logic</div>
     </button>
+    <button class="element" onclick="goToDefinition('character decision style')">
+      <span class="element-number">9</span>
+      <div class="element-title">Character Decision Style</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character description')">
+      <span class="element-number">10</span>
+      <div class="element-title">Character Description</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character drive')">
+      <span class="element-number">11</span>
+      <div class="element-title">Character Drive</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character flaw')">
+      <span class="element-number">12</span>
+      <div class="element-title">Character Flaw</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character identity')">
+      <span class="element-number">13</span>
+      <div class="element-title">Character Identity</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character motivation')">
+      <span class="element-number">14</span>
+      <div class="element-title">Character Motivation</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character wound')">
+      <span class="element-number">15</span>
+      <div class="element-title">Character Wound</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character truth')">
+      <span class="element-number">16</span>
+      <div class="element-title">Character Truth</div>
+    </button>
+    <button class="element" onclick="goToDefinition('archetypal characters')">
+      <span class="element-number">17</span>
+      <div class="element-title">Archetypal Characters</div>
+    </button>
+    <button class="element" onclick="goToDefinition('dynamic character')">
+      <span class="element-number">18</span>
+      <div class="element-title">Dynamic Character</div>
+    </button>
+    <button class="element" onclick="goToDefinition('flat character')">
+      <span class="element-number">19</span>
+      <div class="element-title">Flat Character</div>
+    </button>
+    <button class="element" onclick="goToDefinition('round characters')">
+      <span class="element-number">20</span>
+      <div class="element-title">Round Characters</div>
+    </button>
+    <button class="element" onclick="goToDefinition('static character')">
+      <span class="element-number">21</span>
+      <div class="element-title">Static Character</div>
+    </button>
+    <button class="element" onclick="goToDefinition('symbolic character')">
+      <span class="element-number">22</span>
+      <div class="element-title">Symbolic Character</div>
+    </button>
+    <button class="element" onclick="goToDefinition('the foil')">
+      <span class="element-number">23</span>
+      <div class="element-title">The Foil</div>
+    </button>
+    <button class="element" onclick="goToDefinition('the hero')">
+      <span class="element-number">24</span>
+      <div class="element-title">The Hero</div>
+    </button>
+    <button class="element" onclick="goToDefinition('the mentor')">
+      <span class="element-number">25</span>
+      <div class="element-title">The Mentor</div>
+    </button>
+    <button class="element" onclick="goToDefinition('the villain')">
+      <span class="element-number">26</span>
+      <div class="element-title">The Villain</div>
+    </button>
+    <button class="element" onclick="goToDefinition('sidekick')">
+      <span class="element-number">27</span>
+      <div class="element-title">Sidekick</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character roles')">
+      <span class="element-number">28</span>
+      <div class="element-title">Character Roles</div>
+    </button>
+    <button class="element" onclick="goToDefinition('role dynamics 2')">
+      <span class="element-number">29</span>
+      <div class="element-title">Role Dynamics 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character role dynamics 3')">
+      <span class="element-number">30</span>
+      <div class="element-title">Character Role Dynamics 3</div>
+    </button>
+    <button class="element" onclick="goToDefinition('character role interaction')">
+      <span class="element-number">31</span>
+      <div class="element-title">Character Role Interaction</div>
+    </button>
+    <button class="element" onclick="goToDefinition('negative arc')">
+      <span class="element-number">32</span>
+      <div class="element-title">Negative Arc</div>
+    </button>
+    <button class="element" onclick="goToDefinition('positive arc')">
+      <span class="element-number">33</span>
+      <div class="element-title">Positive Arc</div>
+    </button>
+    <button class="element" onclick="goToDefinition('flat arc')">
+      <span class="element-number">34</span>
+      <div class="element-title">Flat Arc</div>
+    </button>
+    <button class="element" onclick="goToDefinition('mixed arcs')">
+      <span class="element-number">35</span>
+      <div class="element-title">Mixed Arcs</div>
+    </button>
+    <button class="element" onclick="goToDefinition('final character arcs 1')">
+      <span class="element-number">36</span>
+      <div class="element-title">Final Character Arcs 1</div>
+    </button>
+    <button class="element" onclick="goToDefinition('final character arc 2')">
+      <span class="element-number">37</span>
+      <div class="element-title">Final Character Arc 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('final character arc 3')">
+      <span class="element-number">38</span>
+      <div class="element-title">Final Character Arc 3</div>
+    </button>
+
+    <!-- Structure & Plot Section -->
+    <div class="section-header">Structure & Plot</div>
+    <button class="element" onclick="goToDefinition('beats')">
+      <span class="element-number">39</span>
+      <div class="element-title">Beats</div>
+    </button>
+    <button class="element" onclick="goToDefinition('beats build scenes')">
+      <span class="element-number">40</span>
+      <div class="element-title">Beats Build Scenes</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scene 1')">
+      <span class="element-number">41</span>
+      <div class="element-title">Scene 1</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scenes 2')">
+      <span class="element-number">42</span>
+      <div class="element-title">Scenes 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scene starters')">
+      <span class="element-number">43</span>
+      <div class="element-title">Scene Starters</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scene enders')">
+      <span class="element-number">44</span>
+      <div class="element-title">Scene Enders</div>
+    </button>
+    <button class="element" onclick="goToDefinition('advanced scene starters and enders')">
+      <span class="element-number">45</span>
+      <div class="element-title">Advanced Scene Starters and Enders</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scene transitions')">
+      <span class="element-number">46</span>
+      <div class="element-title">Scene Transitions</div>
+    </button>
+    <button class="element" onclick="goToDefinition('scenes build acts')">
+      <span class="element-number">47</span>
+      <div class="element-title">Scenes Build Acts</div>
+    </button>
+    <button class="element" onclick="goToDefinition('acts build arcs')">
+      <span class="element-number">48</span>
+      <div class="element-title">Acts Build Arcs</div>
+    </button>
+    <button class="element" onclick="goToDefinition('ARCS UNIFY INTO THE NOVEL')">
+      <span class="element-number">49</span>
+      <div class="element-title">Arcs Unify Into The Novel</div>
+    </button>
+    <button class="element" onclick="goToDefinition('pacing part one')">
+      <span class="element-number">50</span>
+      <div class="element-title">Pacing Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('pacing part two')">
+      <span class="element-number">51</span>
+      <div class="element-title">Pacing Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('pacing part three')">
+      <span class="element-number">52</span>
+      <div class="element-title">Pacing Part Three</div>
+    </button>
+    <button class="element" onclick="goToDefinition('setting')">
+      <span class="element-number">53</span>
+      <div class="element-title">Setting</div>
+    </button>
+    <button class="element" onclick="goToDefinition('dialouge part one')">
+      <span class="element-number">54</span>
+      <div class="element-title">Dialogue Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('dialouge part two')">
+      <span class="element-number">55</span>
+      <div class="element-title">Dialogue Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('Exposition')">
+      <span class="element-number">56</span>
+      <div class="element-title">Exposition</div>
+    </button>
+    <button class="element" onclick="goToDefinition('sensory detail.txt')">
+      <span class="element-number">57</span>
+      <div class="element-title">Sensory Detail</div>
+    </button>
+    <button class="element" onclick="goToDefinition('point of view')">
+      <span class="element-number">58</span>
+      <div class="element-title">Point of View</div>
+    </button>
+    <button class="element" onclick="goToDefinition('subtext')">
+      <span class="element-number">59</span>
+      <div class="element-title">Subtext</div>
+    </button>
+    <button class="element" onclick="goToDefinition('planting and payoff')">
+      <span class="element-number">60</span>
+      <div class="element-title">Planting and Payoff</div>
+    </button>
+    <button class="element" onclick="goToDefinition('reader manipulators part one')">
+      <span class="element-number">61</span>
+      <div class="element-title">Reader Manipulators Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('reader manipulators part 2')">
+      <span class="element-number">62</span>
+      <div class="element-title">Reader Manipulators Part 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('reader manipulators part 3')">
+      <span class="element-number">63</span>
+      <div class="element-title">Reader Manipulators Part 3</div>
+    </button>
+    <button class="element" onclick="goToDefinition('reader manipulators part 3ish')">
+      <span class="element-number">64</span>
+      <div class="element-title">Reader Manipulators Part 3ish</div>
+    </button>
+    <button class="element" onclick="goToDefinition('narrative devices part 1')">
+      <span class="element-number">65</span>
+      <div class="element-title">Narrative Devices Part 1</div>
+    </button>
+    <button class="element" onclick="goToDefinition('narrative devices part 2')">
+      <span class="element-number">66</span>
+      <div class="element-title">Narrative Devices Part 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('metaphore')">
+      <span class="element-number">67</span>
+      <div class="element-title">Metaphore</div>
+    </button>
+    <button class="element" onclick="goToDefinition('types of metaphors')">
+      <span class="element-number">68</span>
+      <div class="element-title">Types of Metaphors</div>
+    </button>
+    <button class="element" onclick="goToDefinition('symbolism')">
+      <span class="element-number">69</span>
+      <div class="element-title">Symbolism</div>
+    </button>
+    <button class="element" onclick="goToDefinition('mood')">
+      <span class="element-number">70</span>
+      <div class="element-title">Mood</div>
+    </button>
+    <button class="element" onclick="goToDefinition('motif')">
+      <span class="element-number">71</span>
+      <div class="element-title">Motif</div>
+    </button>
+    <button class="element" onclick="goToDefinition('tone')">
+      <span class="element-number">72</span>
+      <div class="element-title">Tone</div>
+    </button>
+    <button class="element" onclick="goToDefinition('repetition')">
+      <span class="element-number">73</span>
+      <div class="element-title">Repetition</div>
+    </button>
+    <button class="element" onclick="goToDefinition('suspense')">
+      <span class="element-number">74</span>
+      <div class="element-title">Suspense</div>
+    </button>
+    <button class="element" onclick="goToDefinition('suspense part two')">
+      <span class="element-number">75</span>
+      <div class="element-title">Suspense Part Two</div>
+    </button>
+
+    <!-- Language & Style Section -->
+    <div class="section-header">Language & Style</div>
+    <button class="element" onclick="goToDefinition('grammer part one')">
+      <span class="element-number">76</span>
+      <div class="element-title">Grammar Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('grammer part two')">
+      <span class="element-number">77</span>
+      <div class="element-title">Grammar Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('grammer part three')">
+      <span class="element-number">78</span>
+      <div class="element-title">Grammar Part Three</div>
+    </button>
+    <button class="element" onclick="goToDefinition('punctuation')">
+      <span class="element-number">79</span>
+      <div class="element-title">Punctuation</div>
+    </button>
+    <button class="element" onclick="goToDefinition('theme part one')">
+      <span class="element-number">80</span>
+      <div class="element-title">Theme Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('theme part two')">
+      <span class="element-number">81</span>
+      <div class="element-title">Theme Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('theme part three')">
+      <span class="element-number">82</span>
+      <div class="element-title">Theme Part Three</div>
+    </button>
+
+    <!-- Theme & Meaning Section -->
+    <div class="section-header">Theme & Meaning</div>
+    <button class="element" onclick="goToDefinition('theme applied part one')">
+      <span class="element-number">83</span>
+      <div class="element-title">Theme Applied Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('theme applied part two')">
+      <span class="element-number">84</span>
+      <div class="element-title">Theme Applied Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('the writers voice')">
+      <span class="element-number">85</span>
+      <div class="element-title">The Writers Voice</div>
+    </button>
+    <button class="element" onclick="goToDefinition('being an emotional writer')">
+      <span class="element-number">86</span>
+      <div class="element-title">Being an Emotional Writer</div>
+    </button>
+    <button class="element" onclick="goToDefinition('short stories part one')">
+      <span class="element-number">87</span>
+      <div class="element-title">Short Stories Part One</div>
+    </button>
+    <button class="element" onclick="goToDefinition('short stories part two')">
+      <span class="element-number">88</span>
+      <div class="element-title">Short Stories Part Two</div>
+    </button>
+    <button class="element" onclick="goToDefinition('short stories part three')">
+      <span class="element-number">89</span>
+      <div class="element-title">Short Stories Part Three</div>
+    </button>
+    <button class="element" onclick="goToDefinition('3 act structure part 1')">
+      <span class="element-number">90</span>
+      <div class="element-title">3 Act Structure Part 1</div>
+    </button>
+    <button class="element" onclick="goToDefinition('act 2')">
+      <span class="element-number">91</span>
+      <div class="element-title">Act 2</div>
+    </button>
+    <button class="element" onclick="goToDefinition('act 3')">
+      <span class="element-number">92</span>
+      <div class="element-title">Act 3</div>
+    </button>
+
   </div>
   <script>
     function goTo(element) {
       // Navigate to the corresponding HTML page
       window.location.href = element + '.html';
+    }
+    
+    function goToDefinition(filename) {
+      // Navigate to a page that displays the definition file content
+      window.location.href = 'definition.html?file=' + encodeURIComponent(filename);
     }
   </script>
   

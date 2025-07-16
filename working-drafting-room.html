@@ -3,13 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drafting Room</title>
-    
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-    
+    <title>Drafting Room Test</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -156,38 +150,13 @@
     </div>
 
     <script>
-        // Firebase Configuration (optional enhancement)
-        const firebaseConfig = {
-            apiKey: "AIzaSyBi23iRWj7rE4gMssuoKx8NxO5cdnUNj7E",
-            authDomain: "pfp-data-14b9a.firebaseapp.com",
-            projectId: "pfp-data-14b9a",
-            storageBucket: "pfp-data-14b9a.firebasestorage.app",
-            messagingSenderId: "932276405722",
-            appId: "1:932276405722:web:d9cd4cc1a5a4856ee82ce3"
-        };
-        
-        // Initialize Firebase if available
-        let auth = null;
-        let db = null;
-        let currentUser = null;
-        
-        try {
-            firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.log('Firebase not available, using localStorage only:', error.message);
-        }
-        
         // Global state
         let currentProject = null;
         let allProjects = {};
         
         // Helper functions
         function updateDebugInfo(action) {
-            const userInfo = currentUser ? ` (${currentUser.email})` : ' (Local)';
-            document.getElementById('current-project-name').textContent = currentProject ? currentProject.name + userInfo : 'None';
+            document.getElementById('current-project-name').textContent = currentProject ? currentProject.name : 'None';
             document.getElementById('settings-count').textContent = currentProject ? (currentProject.settings || []).length : 0;
             document.getElementById('characters-count').textContent = currentProject ? (currentProject.characters || []).length : 0;
             document.getElementById('last-action').textContent = action;
@@ -204,50 +173,15 @@
             updateDebugInfo(`Navigated to ${sectionId}`);
         }
         
-        // Data persistence - Firebase + localStorage hybrid
-        function saveToStorage() {
-            // Always save to localStorage first
+        function saveToLocalStorage() {
             localStorage.setItem('draftingRoomProjects', JSON.stringify(allProjects));
-            
-            // If user is logged in, also save to Firebase
-            if (currentUser && db) {
-                try {
-                    db.collection('users').doc(currentUser.uid).set({
-                        projects: allProjects,
-                        lastUpdated: new Date()
-                    });
-                    console.log('Saved to Firebase');
-                } catch (error) {
-                    console.log('Firebase save failed, localStorage still works:', error.message);
-                }
-            }
         }
         
-        function loadFromStorage() {
-            // Always load from localStorage first
+        function loadFromLocalStorage() {
             const stored = localStorage.getItem('draftingRoomProjects');
             if (stored) {
                 allProjects = JSON.parse(stored);
                 refreshProjectList();
-            }
-            
-            // If user is logged in, try to load from Firebase
-            if (currentUser && db) {
-                try {
-                    db.collection('users').doc(currentUser.uid).get().then(doc => {
-                        if (doc.exists) {
-                            const firebaseData = doc.data();
-                            if (firebaseData.projects) {
-                                allProjects = firebaseData.projects;
-                                localStorage.setItem('draftingRoomProjects', JSON.stringify(allProjects));
-                                refreshProjectList();
-                                console.log('Loaded from Firebase');
-                            }
-                        }
-                    });
-                } catch (error) {
-                    console.log('Firebase load failed, using localStorage:', error.message);
-                }
             }
         }
         
@@ -255,102 +189,11 @@
             const container = document.getElementById('project-list');
             container.innerHTML = '';
             
-            // Add login/logout button
-            const authDiv = document.createElement('div');
-            authDiv.style.marginBottom = '10px';
-            authDiv.style.padding = '10px';
-            authDiv.style.background = '#f8f9fa';
-            authDiv.style.borderRadius = '5px';
-            
-            if (currentUser) {
-                authDiv.innerHTML = `
-                    <strong>Logged in as: ${currentUser.email}</strong>
-                    <button onclick="logout()" style="margin-left: 10px;">Logout</button>
-                `;
-            } else {
-                authDiv.innerHTML = `
-                    <button onclick="showLogin()">Login</button>
-                    <button onclick="showSignup()">Sign Up</button>
-                    <small style="display: block; margin-top: 5px;">Login to sync projects across devices</small>
-                `;
-            }
-            container.appendChild(authDiv);
-            
-            // Add projects
             Object.keys(allProjects).forEach(projectName => {
                 const button = document.createElement('button');
                 button.textContent = projectName;
                 button.onclick = () => loadProject(projectName);
                 container.appendChild(button);
-            });
-        }
-        
-        // Firebase Auth functions
-        function showLogin() {
-            if (!auth) {
-                alert('Firebase not available. You can still use the app locally.');
-                return;
-            }
-            
-            const email = prompt('Enter your email:');
-            const password = prompt('Enter your password:');
-            
-            if (email && password) {
-                auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        currentUser = userCredential.user;
-                        updateDebugInfo('Logged in');
-                        loadFromStorage();
-                    })
-                    .catch((error) => {
-                        alert('Login failed: ' + error.message);
-                    });
-            }
-        }
-        
-        function showSignup() {
-            if (!auth) {
-                alert('Firebase not available. You can still use the app locally.');
-                return;
-            }
-            
-            const email = prompt('Enter your email:');
-            const password = prompt('Enter your password (min 6 characters):');
-            
-            if (email && password) {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        currentUser = userCredential.user;
-                        updateDebugInfo('Signed up');
-                        loadFromStorage();
-                    })
-                    .catch((error) => {
-                        alert('Signup failed: ' + error.message);
-                    });
-            }
-        }
-        
-        function logout() {
-            if (auth) {
-                auth.signOut().then(() => {
-                    currentUser = null;
-                    updateDebugInfo('Logged out');
-                    refreshProjectList();
-                });
-            }
-        }
-        
-        // Listen for auth state changes
-        if (auth) {
-            auth.onAuthStateChanged((user) => {
-                currentUser = user;
-                if (user) {
-                    console.log('User logged in:', user.email);
-                    loadFromStorage();
-                } else {
-                    console.log('User logged out');
-                    refreshProjectList();
-                }
             });
         }
         
@@ -375,7 +218,7 @@
             };
             
             allProjects[name] = currentProject;
-            saveToStorage();
+            saveToLocalStorage();
             refreshProjectList();
             document.getElementById('new-project-name').value = '';
             showSection('story-check');
@@ -393,7 +236,7 @@
         function saveStoryCheck() {
             if (!currentProject) return;
             currentProject.storyCheck = document.getElementById('story-check-input').value;
-            saveToStorage();
+            saveToLocalStorage();
             updateDebugInfo('Saved story check');
         }
         
@@ -409,7 +252,7 @@
                 content: ''
             });
             
-            saveToStorage();
+            saveToLocalStorage();
             renderOutline();
             updateDebugInfo(`Added scene: ${title}`);
         }
@@ -429,7 +272,7 @@
                 notes: ''
             });
             
-            saveToStorage();
+            saveToLocalStorage();
             renderSettings();
             updateDebugInfo(`Added setting: ${name}`);
         }
@@ -450,7 +293,7 @@
                 notes: ''
             });
             
-            saveToStorage();
+            saveToLocalStorage();
             renderCharacters();
             updateDebugInfo(`Added character: ${name}`);
         }
@@ -534,7 +377,7 @@
             const newContent = prompt('Edit scene content:', scene.content);
             if (newContent !== null) {
                 scene.content = newContent;
-                saveToStorage();
+                saveToLocalStorage();
                 renderOutline();
                 updateDebugInfo(`Edited scene: ${scene.title}`);
             }
@@ -551,7 +394,7 @@
                 if (newDesc !== null) {
                     setting.description = newDesc;
                 }
-                saveToStorage();
+                saveToLocalStorage();
                 renderSettings();
                 updateDebugInfo(`Edited setting: ${setting.name}`);
             }
@@ -568,7 +411,7 @@
                 if (newDesc !== null) {
                     character.description = newDesc;
                 }
-                saveToStorage();
+                saveToLocalStorage();
                 renderCharacters();
                 updateDebugInfo(`Edited character: ${character.name}`);
             }
@@ -577,7 +420,7 @@
         function deleteScene(id) {
             if (confirm('Delete this scene?')) {
                 currentProject.scenes = currentProject.scenes.filter(s => s.id !== id);
-                saveToStorage();
+                saveToLocalStorage();
                 renderOutline();
                 updateDebugInfo('Deleted scene');
             }
@@ -586,7 +429,7 @@
         function deleteSetting(id) {
             if (confirm('Delete this setting?')) {
                 currentProject.settings = currentProject.settings.filter(s => s.id !== id);
-                saveToStorage();
+                saveToLocalStorage();
                 renderSettings();
                 updateDebugInfo('Deleted setting');
             }
@@ -595,14 +438,14 @@
         function deleteCharacter(id) {
             if (confirm('Delete this character?')) {
                 currentProject.characters = currentProject.characters.filter(c => c.id !== id);
-                saveToStorage();
+                saveToLocalStorage();
                 renderCharacters();
                 updateDebugInfo('Deleted character');
             }
         }
         
         // Initialize
-        loadFromStorage();
+        loadFromLocalStorage();
         updateDebugInfo('Page initialized');
     </script>
 </body>

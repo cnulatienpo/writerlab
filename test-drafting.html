@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Drafting Room</title>
+  <style>
+    .hidden { display: none; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+    button { margin: 5px; padding: 10px; }
+    textarea { width: 100%; height: 100px; }
+    input { width: 100%; padding: 5px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>Test Drafting Room</h1>
+  
+  <section id="project-dashboard">
+    <h2>Projects</h2>
+    <div id="project-list"></div>
+    <input id="new-project-name" placeholder="Project name..." />
+    <button id="create-project">Create Project</button>
+  </section>
+
+  <section id="story-check" class="hidden">
+    <h2>Story Check</h2>
+    <textarea id="story-check-input" placeholder="Story check..."></textarea>
+    <button id="save-story-check">Save</button>
+    <div>
+      <button id="go-to-outline">Go to Outline</button>
+      <button id="go-to-settings">Go to Settings</button>
+      <button id="go-to-characters">Go to Characters</button>
+    </div>
+  </section>
+
+  <section id="outline" class="hidden">
+    <h2>Outline</h2>
+    <div id="outline-container"></div>
+    <button id="add-scene">Add Scene</button>
+  </section>
+
+  <section id="settings-docs" class="hidden">
+    <h2>Settings</h2>
+    <div id="settings-container"></div>
+    <button id="add-setting">Add Setting</button>
+  </section>
+
+  <section id="character-docs" class="hidden">
+    <h2>Characters</h2>
+    <div id="characters-container"></div>
+    <button id="add-character">Add Character</button>
+  </section>
+
+  <script>
+    // Test basic functionality
+    let currentProject = null;
+    let projects = [];
+
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(section => {
+        if (section.id !== 'project-dashboard') {
+          section.classList.add('hidden');
+        }
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function createProject() {
+      const name = document.getElementById('new-project-name').value.trim();
+      if (!name) return;
+      
+      currentProject = {
+        name: name,
+        scenes: [],
+        storyCheck: '',
+        settings: [],
+        characters: []
+      };
+      
+      localStorage.setItem('project:' + name, JSON.stringify(currentProject));
+      document.getElementById('new-project-name').value = '';
+      document.getElementById('story-check').classList.remove('hidden');
+      refreshProjectList();
+    }
+
+    function refreshProjectList() {
+      const list = document.getElementById('project-list');
+      list.innerHTML = '';
+      
+      const projects = Object.keys(localStorage)
+        .filter(k => k.startsWith('project:'))
+        .map(k => k.slice(8));
+      
+      projects.forEach(name => {
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.onclick = () => loadProject(name);
+        list.appendChild(btn);
+      });
+    }
+
+    function loadProject(name) {
+      const data = localStorage.getItem('project:' + name);
+      if (data) {
+        currentProject = JSON.parse(data);
+        document.getElementById('story-check-input').value = currentProject.storyCheck || '';
+        document.getElementById('story-check').classList.remove('hidden');
+        renderSettings();
+        renderCharacters();
+      }
+    }
+
+    function renderSettings() {
+      const container = document.getElementById('settings-container');
+      container.innerHTML = '';
+      
+      if (currentProject && currentProject.settings) {
+        currentProject.settings.forEach(setting => {
+          const div = document.createElement('div');
+          div.innerHTML = `<h4>${setting.name}</h4><p>${setting.description}</p>`;
+          container.appendChild(div);
+        });
+      }
+      
+      if (!currentProject || !currentProject.settings || currentProject.settings.length === 0) {
+        container.innerHTML = '<p>No settings yet. Click "Add Setting" to create one.</p>';
+      }
+    }
+
+    function renderCharacters() {
+      const container = document.getElementById('characters-container');
+      container.innerHTML = '';
+      
+      if (currentProject && currentProject.characters) {
+        currentProject.characters.forEach(character => {
+          const div = document.createElement('div');
+          div.innerHTML = `<h4>${character.name}</h4><p>${character.description}</p>`;
+          container.appendChild(div);
+        });
+      }
+      
+      if (!currentProject || !currentProject.characters || currentProject.characters.length === 0) {
+        container.innerHTML = '<p>No characters yet. Click "Add Character" to create one.</p>';
+      }
+    }
+
+    function addSetting() {
+      if (!currentProject) return;
+      
+      const name = prompt('Setting name:');
+      if (!name) return;
+      
+      const description = prompt('Setting description:');
+      
+      if (!currentProject.settings) {
+        currentProject.settings = [];
+      }
+      
+      currentProject.settings.push({
+        id: Date.now(),
+        name: name,
+        description: description || ''
+      });
+      
+      localStorage.setItem('project:' + currentProject.name, JSON.stringify(currentProject));
+      renderSettings();
+    }
+
+    function addCharacter() {
+      if (!currentProject) return;
+      
+      const name = prompt('Character name:');
+      if (!name) return;
+      
+      const description = prompt('Character description:');
+      
+      if (!currentProject.characters) {
+        currentProject.characters = [];
+      }
+      
+      currentProject.characters.push({
+        id: Date.now(),
+        name: name,
+        description: description || ''
+      });
+      
+      localStorage.setItem('project:' + currentProject.name, JSON.stringify(currentProject));
+      renderCharacters();
+    }
+
+    // Event listeners
+    document.getElementById('create-project').onclick = createProject;
+    document.getElementById('go-to-outline').onclick = () => showSection('outline');
+    document.getElementById('go-to-settings').onclick = () => showSection('settings-docs');
+    document.getElementById('go-to-characters').onclick = () => showSection('character-docs');
+    document.getElementById('add-setting').onclick = addSetting;
+    document.getElementById('add-character').onclick = addCharacter;
+
+    // Initialize
+    refreshProjectList();
+  </script>
+</body>
+</html>
