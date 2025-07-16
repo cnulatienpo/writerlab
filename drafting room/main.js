@@ -1,3 +1,57 @@
+import { auth } from "../tokens/firebaseConfig.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";  // Add this at the top if you haven't yet
+
+const SHEETDB_URL = "https://sheetdb.io/api/v1/14f5e5la3laxh"; // <-- put yours here
+
+async function testSheetDB() {
+  const testData = {
+    user_id: "testuser",
+    email: "test@example.com",
+    tokens_current: 0,
+    tokens_total: 0,
+    tokens_spent: 0,
+    last_refill_date: new Date().toISOString(),
+    role: "user",
+    created_at: new Date().toISOString(),
+    notes: "test row"
+  };
+
+  try {
+    const res = await axios.post(SHEETDB_URL, { data: testData });
+    console.log("Test row saved:", res.data);
+  } catch (err) {
+    console.error("Error saving to sheet:", err.message);
+  }
+}
+
+testSheetDB();
+
+// SIGN UP
+async function signUp(email, password) {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("Signed up:", user.uid, user.email);
+    // You can save user.uid to your Google Sheet after this
+    return user;
+  } catch (error) {
+    console.error("Signup error:", error.message);
+  }
+}
+
+// LOGIN
+async function logIn(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    console.log("Logged in:", user.uid, user.email);
+    return user;
+  } catch (error) {
+    console.error("Login error:", error.message);
+  }
+}
+
 // DOM Elements
 const projectList = document.getElementById('project-list');
 const createProjectBtn = document.getElementById('create-project');
