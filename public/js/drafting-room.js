@@ -183,6 +183,7 @@ let projects = {};
 let currentSceneIndex = null;
 let autosaveTimer;
 let latestRayRayReply = '';
+let currentAnalysisResult = null;
 
 function getCurrentSceneTitle() {
   if (currentSceneIndex !== null && currentProject && projects[currentProject]) {
@@ -452,10 +453,19 @@ function addJunkNote() {
 // VISUALIZER FUNCTIONS
 // ===============================================
 
-function toggleLayer(layerId) {
-  const el = document.getElementById(layerId);
-  if (!el) return;
-  el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+function toggleLayer(layerName, drawFunction, data) {
+  const checkbox = document.getElementById(`toggle-${layerName}-layer`);
+  const canvas = document.getElementById(`${layerName}-layer`);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  if (!checkbox || !checkbox.checked) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'none';
+  } else {
+    canvas.style.display = 'block';
+    drawFunction(data);
+  }
 }
 
 function drawMotifLayer(data) {
@@ -556,35 +566,16 @@ function drawThemeLayer(data) {
 }
 
 function redrawAllLayers(data) {
-  const motifToggle = document.getElementById('toggle-motif-layer');
-  if (!motifToggle || motifToggle.checked) {
-    drawMotifLayer(data);
+  if (data) {
+    currentAnalysisResult = data;
   }
 
-  const emotionToggle = document.getElementById('toggle-emotion-layer');
-  if (!emotionToggle || emotionToggle.checked) {
-    drawEmotionLayer(data);
-  }
-
-  const characterToggle = document.getElementById('toggle-character-layer');
-  if (!characterToggle || characterToggle.checked) {
-    drawCharacterLayer(data);
-  }
-
-  const pacingToggle = document.getElementById('toggle-pacing-layer');
-  if (!pacingToggle || pacingToggle.checked) {
-    drawPacingLayer(data);
-  }
-
-  const structureToggle = document.getElementById('toggle-structure-layer');
-  if (!structureToggle || structureToggle.checked) {
-    drawStructureLayer(data);
-  }
-
-  const themeToggle = document.getElementById('toggle-theme-layer');
-  if (!themeToggle || themeToggle.checked) {
-    drawThemeLayer(data);
-  }
+  toggleLayer('motif', drawMotifLayer, currentAnalysisResult);
+  toggleLayer('emotion', drawEmotionLayer, currentAnalysisResult);
+  toggleLayer('character', drawCharacterLayer, currentAnalysisResult);
+  toggleLayer('pacing', drawPacingLayer, currentAnalysisResult);
+  toggleLayer('structure', drawStructureLayer, currentAnalysisResult);
+  toggleLayer('theme', drawThemeLayer, currentAnalysisResult);
 }
 
 // ===============================================
@@ -715,6 +706,7 @@ function sendRayRay() {
   let analysisData = null;
   if (textToAnalyze) {
     analysisData = runAllDataAnalysis(textToAnalyze);
+    currentAnalysisResult = analysisData;
   }
 
   // Build comprehensive prompt with analysis
@@ -930,6 +922,7 @@ ${analysisData.characterMap.length > 0 ?
       const textForAnalysis = getSelectedOrCurrentText();
       if (textForAnalysis) {
         const quickAnalysis = runAllDataAnalysis(textForAnalysis);
+        currentAnalysisResult = quickAnalysis;
         const simpleFeedback = `I've analyzed your text (${quickAnalysis.telemetry.wordCount} words, ${quickAnalysis.telemetry.sentenceCount} sentences). The writing shows ${quickAnalysis.telemetry.avgSentenceLength > 15 ? 'complex structure' : 'clear flow'} with ${quickAnalysis.telemetry.dialoguePercent}% dialogue. Key themes include: ${quickAnalysis.motifMap.map(m => m.word).join(', ')}. [Demo mode - API connection needed for full analysis]`;
         botMsg.textContent = "Ray Ray: " + simpleFeedback;
         latestRayRayReply = simpleFeedback;
@@ -984,6 +977,24 @@ toggleVisualizerBtn.onclick = () => {
     redrawAllLayers();
   }
 };
+
+const DRAW_FUNCTIONS = {
+  motif: drawMotifLayer,
+  emotion: drawEmotionLayer,
+  character: drawCharacterLayer,
+  pacing: drawPacingLayer,
+  structure: drawStructureLayer,
+  theme: drawThemeLayer
+};
+
+Object.entries(DRAW_FUNCTIONS).forEach(([name, fn]) => {
+  const checkbox = document.getElementById(`toggle-${name}-layer`);
+  if (checkbox) {
+    checkbox.addEventListener('change', () => {
+      toggleLayer(name, fn, currentAnalysisResult);
+    });
+  }
+});
 
 // Junk drawer
 addNoteBtn.onclick = addJunkNote;
