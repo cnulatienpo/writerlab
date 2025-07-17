@@ -179,6 +179,10 @@ const conflictSlider = document.getElementById('conflict-slider');
 const revealSlider = document.getElementById('reveal-slider');
 const sceneNote = document.getElementById('scene-note');
 
+const templateSelector = document.getElementById('template-selector');
+const insertTemplateBtn = document.getElementById('insert-template');
+const beatStack = document.getElementById('beat-stack');
+
 // State
 let currentProject = null;
 let projects = {};
@@ -1047,6 +1051,34 @@ Object.entries(DRAW_FUNCTIONS).forEach(([name, fn]) => {
 
 // Junk drawer
 addNoteBtn.onclick = addJunkNote;
+
+if (insertTemplateBtn) {
+  insertTemplateBtn.addEventListener('click', () => {
+    const tpl = templateSelector ? templateSelector.value : '';
+    let text = '';
+    switch (tpl) {
+      case 'emotional-turn':
+        text = 'Emotional Turn: Describe a change in feeling.';
+        break;
+      case 'reversal':
+        text = 'Reversal: An unexpected outcome occurs.';
+        break;
+      case 'internal-dilemma':
+        text = 'Internal Dilemma: Character faces a tough choice.';
+        break;
+      case 'power-shift':
+        text = 'Power Shift: Control moves to a different character.';
+        break;
+      default:
+        text = '';
+    }
+    const div = document.createElement('div');
+    div.className = 'beat-block';
+    div.contentEditable = true;
+    div.textContent = text;
+    if (beatStack) beatStack.appendChild(div);
+  });
+}
 
 // ===============================================
 // INITIALIZATION
