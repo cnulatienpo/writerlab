@@ -185,6 +185,7 @@ const insertTemplateBtn = document.getElementById('insert-template');
 const suggestTemplateBtn = document.getElementById('suggest-template');
 const templateSuggestions = document.getElementById('template-suggestions');
 const emotionTemplateSuggestions = document.getElementById('emotion-template-suggestions');
+const contextualTemplateSuggestions = document.getElementById('contextual-template-suggestions');
 const beatStack = document.getElementById('beat-stack');
 
 // Beat template scaffolds
@@ -218,18 +219,21 @@ const EMOTION_COLORS = {
   sadness: '#9e9e9e'
 };
 
-// Suggest templates based on context tags
+// Suggest templates based on act + emotion context
 function suggestTemplates(context = {}) {
-  const values = Object.values(context);
+  const { emotion, act } = context;
   return beatTemplates
     .map(tpl => {
-      const matchCount = tpl.tags ? tpl.tags.reduce((count, tag) => {
-        return values.includes(tag) ? count + 1 : count;
-      }, 0) : 0;
-      return { tpl, matchCount };
+      const hasEmotion = emotion && tpl.tags && tpl.tags.includes(emotion);
+      const hasAct = act && tpl.tags && tpl.tags.includes(act);
+      let score = 0;
+      if (hasEmotion && hasAct) score = 2;
+      else if (hasEmotion || hasAct) score = 1;
+      return { tpl, score };
     })
-    .filter(item => item.matchCount > 0)
-    .sort((a, b) => b.matchCount - a.matchCount)
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
     .map(item => item.tpl);
 }
 
@@ -248,21 +252,45 @@ function suggestTemplatesFromEmotion(emotion) {
     .map(item => item.tpl);
 }
 
+function showContextualTemplateSuggestions(context) {
+  if (!contextualTemplateSuggestions) return;
+  contextualTemplateSuggestions.innerHTML = '';
+  const suggestions = suggestTemplates(context);
+  suggestions.forEach(tpl => {
+    const card = document.createElement('div');
+    card.className = 'template-card';
+
+    const nameEl = document.createElement('div');
+    nameEl.textContent = tpl.name;
+    card.appendChild(nameEl);
+
+    const previewEl = document.createElement('div');
+    previewEl.textContent = tpl.scaffold;
+    card.appendChild(previewEl);
+
+    const tagsEl = document.createElement('div');
+    tagsEl.textContent = `Tags: ${tpl.tags.join(', ')}`;
+    card.appendChild(tagsEl);
+
+    const reasonEl = document.createElement('div');
+    reasonEl.textContent = `Recommended for ${context.act} + tone: ${context.emotion}`;
+    card.appendChild(reasonEl);
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Insert';
+    btn.addEventListener('click', () => insertTemplateBeat(tpl.name));
+    card.appendChild(btn);
+
+    contextualTemplateSuggestions.appendChild(card);
+  });
+}
+
 function collectContext() {
-  const emotions = [];
+  let emotion = '';
   if (currentAnalysisResult && currentAnalysisResult.emotionHeatmap) {
     const sorted = Object.entries(currentAnalysisResult.emotionHeatmap)
-      .sort((a, b) => b[1] - a[1])
-      .filter(([, c]) => c > 0);
-    sorted.slice(0, 2).forEach(([e]) => emotions.push(e));
-  }
-
-  let pacing = 'medium';
-  if (currentAnalysisResult && currentAnalysisResult.telemetry) {
-    const avg = currentAnalysisResult.telemetry.avgSentenceLength || 0;
-    if (avg > 18) pacing = 'slow';
-    else if (avg > 12) pacing = 'medium';
-    else pacing = 'fast';
+      .sort((a, b) => b[1] - a[1]);
+    if (sorted.length && sorted[0][1] > 0) emotion = sorted[0][0];
   }
 
   let act = '';
@@ -275,8 +303,7 @@ function collectContext() {
   }
 
   return {
-    emotion: emotions.join(', '),
-    pacing,
+    emotion,
     act
   };
 }
@@ -488,6 +515,17 @@ function editScene(index) {
   outlineSection.classList.add('hidden');
   drawer.classList.add('hidden');
   updateWordCount();
+
+  if (scene.text && scene.text.trim()) {
+    currentAnalysisResult = runAllDataAnalysis(scene.text);
+    const entries = Object.entries(currentAnalysisResult.emotionHeatmap || {})
+      .sort((a, b) => b[1] - a[1]);
+    const topEmotion = entries.length && entries[0][1] > 0 ? entries[0][0] : '';
+    const context = { emotion: topEmotion, act: sceneAct.value || '' };
+    showContextualTemplateSuggestions(context);
+  } else if (contextualTemplateSuggestions) {
+    contextualTemplateSuggestions.innerHTML = '';
+  }
 }
 
 // Save Scene
@@ -1265,7 +1303,7 @@ if (insertTemplateBtn) {
 if (suggestTemplateBtn) {
   suggestTemplateBtn.addEventListener('click', () => {
     const context = collectContext();
-    const suggestions = suggestTemplates(context).slice(0, 3);
+    const suggestions = suggestTemplates(context);
     if (templateSuggestions) {
       templateSuggestions.innerHTML = '';
       suggestions.forEach(tpl => {
