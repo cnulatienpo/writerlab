@@ -355,6 +355,10 @@ main {
   color: #ccc;
 }
 
+#feedback-content div {
+  margin-bottom: 0.5em;
+}
+
 /* Ray Ray Chat Window */
 #rayray-container {
   position: fixed;

@@ -616,10 +616,22 @@ function getAllScenes() {
 }
 
 function addFeedbackToTray(sceneTitle, feedback) {
-  feedbackContent.innerHTML = `
-    <strong>${sceneTitle}</strong><br>
-    ${feedback}
-  `;
+  const entry = document.createElement('div');
+
+  const title = document.createElement('strong');
+  title.textContent = sceneTitle;
+  entry.appendChild(title);
+
+  const messagePara = document.createElement('p');
+  messagePara.textContent = feedback;
+  entry.appendChild(messagePara);
+
+  const divider = document.createElement('hr');
+  divider.style.border = '1px solid #333';
+  entry.appendChild(divider);
+
+  feedbackContent.appendChild(entry);
+  feedbackContent.scrollTop = feedbackContent.scrollHeight;
 }
 
 function analyzeSceneWithRayRay(scene) {
