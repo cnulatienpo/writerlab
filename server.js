@@ -82,6 +82,27 @@ app.get('/profile/:type', (req, res) => {
   });
 });
 
+// Serve privacy policy
+app.get('/privacy', (req, res) => {
+  const filePath = path.join(__dirname, 'privacy policy');
+  fs.readFile(filePath, 'utf-8', (err, data) => {
+    if (err) {
+      console.error('Error reading privacy policy:', err);
+      return res.status(500).send('Could not load privacy policy');
+    }
+    const escaped = data
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    res.send(
+      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Privacy Policy</title>` +
+      `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap">` +
+      `<style>body{background:#111;color:#f4f4f4;font-family:'Space Grotesk',sans-serif;padding:2rem;line-height:1.5;}pre{white-space:pre-wrap;}a{color:#f4f4f4;}</style>` +
+      `</head><body><pre>${escaped}</pre></body></html>`
+    );
+  });
+});
+
 // DeepSeek API endpoint for Ray Ray
 app.post('/api/deepseek/chat', async (req, res) => {
   const { messages, model = 'deepseek-chat', temperature = 0.7, max_tokens = 500 } = req.body;
