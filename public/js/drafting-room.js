@@ -479,13 +479,39 @@ function drawEmotionLayer(data) {
   const canvas = document.getElementById('emotion-layer');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+
   ctx.fillStyle = 'rgba(255, 224, 178, 0.3)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   ctx.fillStyle = '#885518';
   ctx.font = "24px 'Space Grotesk', sans-serif";
   ctx.fillText("Emotion Heatmap", 20, 40);
+
+  if (!data || !data.emotionHeatmap) return;
+
+  const entries = Object.entries(data.emotionHeatmap);
+  if (entries.length === 0) return;
+
+  const values = entries.map(([, count]) => count);
+  const max = Math.max(...values, 1);
+  const padding = 20;
+  const availableWidth = canvas.width - padding * (entries.length + 1);
+  const barWidth = availableWidth / entries.length;
+
+  entries.forEach(([emotion, count], index) => {
+    const x = padding + index * (barWidth + padding);
+    const barHeight = (count / max) * (canvas.height - 80);
+    const y = canvas.height - barHeight - 40;
+
+    ctx.fillStyle = '#ffb347';
+    ctx.fillRect(x, y, barWidth, barHeight);
+
+    ctx.fillStyle = '#885518';
+    ctx.font = "12px 'Space Grotesk', sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText(emotion, x + barWidth / 2, canvas.height - 15);
+    ctx.fillText(count, x + barWidth / 2, y - 5);
+  });
 }
 
 function drawCharacterLayer(data) {
