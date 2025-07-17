@@ -120,3 +120,35 @@ export function getBookSceneTones(book) {
   return tones;
 }
 
+
+// Estimate a tension score for a scene object
+// Returns an integer from 0 (no tension) to 10 (high tension)
+export function getTensionScore(sceneObj) {
+  if (!sceneObj) return 0;
+  let score = 0;
+
+  const heatmap = sceneObj.analysis && sceneObj.analysis.emotionHeatmap;
+  if (heatmap) {
+    const weights = { fear: 2, anger: 2, sadness: 1, surprise: 1, joy: -1 };
+    for (const [emotion, weight] of Object.entries(weights)) {
+      score += weight * (heatmap[emotion] || 0);
+    }
+  }
+
+  const beatsCount = Array.isArray(sceneObj.beats) ? sceneObj.beats.length : 0;
+  score += beatsCount * 0.5;
+
+  let pacingScore = 0;
+  if (typeof sceneObj.pacing === 'number') {
+    pacingScore = sceneObj.pacing;
+  } else if (sceneObj.analysis && sceneObj.analysis.telemetry) {
+    const len = sceneObj.analysis.telemetry.avgSentenceLength;
+    if (typeof len === 'number' && len > 0) {
+      pacingScore = 20 / len;
+    }
+  }
+  score += pacingScore;
+
+  score = Math.round(Math.max(0, Math.min(10, score)));
+  return score;
+}
