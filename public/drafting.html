@@ -97,6 +97,10 @@
     <div id="feedback-tray">
       <h3>🤖 Ray Ray's Feedback</h3>
       <div id="feedback-content">Ask Ray Ray for feedback on your scenes!</div>
+      <div id="save-controls">
+        <button onclick="saveTextFeedback(currentProject, { scene: getCurrentSceneTitle(), content: latestRayRayReply })">💾 Save Feedback</button>
+        <button onclick="saveVisualizerImage('drafting-room-' + Date.now())">🖼️ Save Visual Snapshot</button>
+      </div>
     </div>
   </div>
 
@@ -115,6 +119,7 @@
     </div>
   </div>
 
+  <script src="js/save-feedback.js"></script>
   <script src="js/drafting-room.js"></script>
 </body>
 </html>

@@ -182,6 +182,15 @@ let currentProject = null;
 let projects = {};
 let currentSceneIndex = null;
 let autosaveTimer;
+let latestRayRayReply = '';
+
+function getCurrentSceneTitle() {
+  if (currentSceneIndex !== null && currentProject && projects[currentProject]) {
+    const scene = projects[currentProject].scenes[currentSceneIndex];
+    return scene.title || `Scene ${currentSceneIndex + 1}`;
+  }
+  return 'Text Analysis';
+}
 
 // ===============================================
 // CORE PROJECT MANAGEMENT
@@ -632,6 +641,10 @@ function addFeedbackToTray(sceneTitle, feedback) {
 
   feedbackContent.appendChild(entry);
   feedbackContent.scrollTop = feedbackContent.scrollHeight;
+
+  latestRayRayReply = feedback;
+  const controls = document.getElementById('save-controls');
+  if (controls) controls.style.display = 'block';
 }
 
 function analyzeSceneWithRayRay(scene) {
@@ -794,6 +807,7 @@ Please provide feedback on this text considering:
     
     if (data.choices && data.choices[0] && data.choices[0].message) {
       botMsg.textContent = "Ray Ray: " + data.choices[0].message.content;
+      latestRayRayReply = data.choices[0].message.content;
       
       // Add feedback to tray
       const sceneTitle = currentSceneIndex !== null ? 
@@ -849,6 +863,7 @@ Your writing shows ${analysisData.telemetry.avgSentenceLength > 15 ? 'sophistica
 [Demo Mode: Full AI analysis available when API is connected]`;
         
         botMsg.textContent = "Ray Ray: " + demoFeedback;
+        latestRayRayReply = demoFeedback;
         
         // Add feedback to tray
         const sceneTitle = currentSceneIndex !== null ? 
@@ -865,6 +880,7 @@ Your writing shows ${analysisData.telemetry.avgSentenceLength > 15 ? 'sophistica
           const quickAnalysis = runAllDataAnalysis(textForAnalysis);
           const simpleFeedback = `I've analyzed your text (${quickAnalysis.telemetry.wordCount} words, ${quickAnalysis.telemetry.sentenceCount} sentences). The writing shows ${quickAnalysis.telemetry.avgSentenceLength > 15 ? 'complex structure' : 'clear flow'} with ${quickAnalysis.telemetry.dialoguePercent}% dialogue. Key themes include: ${quickAnalysis.motifMap.map(m => m.word).join(', ')}. [Demo mode - API connection needed for full analysis]`;
           botMsg.textContent = "Ray Ray: " + simpleFeedback;
+          latestRayRayReply = simpleFeedback;
           addFeedbackToTray("Quick Analysis", simpleFeedback);
         } else {
           botMsg.textContent = "Ray Ray: I'm having trouble understanding. Could you rephrase that?";
@@ -919,7 +935,8 @@ ${analysisData.characterMap.length > 0 ?
 [Note: This is demo mode - connect to DeepSeek API for full personalized feedback]`;
       
       botMsg.textContent = "Ray Ray: " + demoFeedback;
-      
+      latestRayRayReply = demoFeedback;
+
       // Add feedback to tray
       const sceneTitle = currentSceneIndex !== null ? 
         (projects[currentProject].scenes[currentSceneIndex].title || `Scene ${currentSceneIndex + 1}`) : 
@@ -935,6 +952,7 @@ ${analysisData.characterMap.length > 0 ?
         const quickAnalysis = runAllDataAnalysis(textForAnalysis);
         const simpleFeedback = `I've analyzed your text (${quickAnalysis.telemetry.wordCount} words, ${quickAnalysis.telemetry.sentenceCount} sentences). The writing shows ${quickAnalysis.telemetry.avgSentenceLength > 15 ? 'complex structure' : 'clear flow'} with ${quickAnalysis.telemetry.dialoguePercent}% dialogue. Key themes include: ${quickAnalysis.motifMap.map(m => m.word).join(', ')}. [Demo mode - API connection needed for full analysis]`;
         botMsg.textContent = "Ray Ray: " + simpleFeedback;
+        latestRayRayReply = simpleFeedback;
         addFeedbackToTray("Quick Analysis", simpleFeedback);
       } else {
         botMsg.textContent = "Ray Ray: I'm having trouble understanding. Could you rephrase that?";

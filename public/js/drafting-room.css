@@ -359,6 +359,17 @@ main {
   margin-bottom: 0.5em;
 }
 
+#save-controls {
+  padding: 10px;
+  display: none;
+  display: flex;
+  gap: 6px;
+}
+
+#save-controls button {
+  flex: 1;
+}
+
 /* Ray Ray Chat Window */
 #rayray-container {
   position: fixed;
