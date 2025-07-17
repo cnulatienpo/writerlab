@@ -567,12 +567,35 @@ function drawThemeLayer(data) {
 }
 
 function redrawAllLayers(data) {
-  drawMotifLayer(data);
-  drawEmotionLayer(data);
-  drawCharacterLayer(data);
-  drawPacingLayer(data);
-  drawStructureLayer(data);
-  drawThemeLayer(data);
+  const motifToggle = document.getElementById('toggle-motif-layer');
+  if (!motifToggle || motifToggle.checked) {
+    drawMotifLayer(data);
+  }
+
+  const emotionToggle = document.getElementById('toggle-emotion-layer');
+  if (!emotionToggle || emotionToggle.checked) {
+    drawEmotionLayer(data);
+  }
+
+  const characterToggle = document.getElementById('toggle-character-layer');
+  if (!characterToggle || characterToggle.checked) {
+    drawCharacterLayer(data);
+  }
+
+  const pacingToggle = document.getElementById('toggle-pacing-layer');
+  if (!pacingToggle || pacingToggle.checked) {
+    drawPacingLayer(data);
+  }
+
+  const structureToggle = document.getElementById('toggle-structure-layer');
+  if (!structureToggle || structureToggle.checked) {
+    drawStructureLayer(data);
+  }
+
+  const themeToggle = document.getElementById('toggle-theme-layer');
+  if (!themeToggle || themeToggle.checked) {
+    drawThemeLayer(data);
+  }
 }
 
 // ===============================================
