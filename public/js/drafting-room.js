@@ -184,6 +184,7 @@ const templateSelector = document.getElementById('template-selector');
 const insertTemplateBtn = document.getElementById('insert-template');
 const suggestTemplateBtn = document.getElementById('suggest-template');
 const templateSuggestions = document.getElementById('template-suggestions');
+const emotionTemplateSuggestions = document.getElementById('emotion-template-suggestions');
 const beatStack = document.getElementById('beat-stack');
 
 // Beat template scaffolds
@@ -210,6 +211,13 @@ const beatTemplates = [
   }
 ];
 
+const EMOTION_COLORS = {
+  anger: '#f44336',
+  joy: '#ffeb3b',
+  fear: '#2196f3',
+  sadness: '#9e9e9e'
+};
+
 // Suggest templates based on context tags
 function suggestTemplates(context = {}) {
   const values = Object.values(context);
@@ -222,6 +230,21 @@ function suggestTemplates(context = {}) {
     })
     .filter(item => item.matchCount > 0)
     .sort((a, b) => b.matchCount - a.matchCount)
+    .map(item => item.tpl);
+}
+
+function suggestTemplatesFromEmotion(emotion) {
+  const general = ['emotion', 'turn', 'reaction', 'internal'];
+  return beatTemplates
+    .map(tpl => {
+      let score = 0;
+      if (tpl.tags && tpl.tags.includes(emotion)) score = 2;
+      else if (tpl.tags && tpl.tags.some(t => general.includes(t))) score = 1;
+      return { tpl, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
     .map(item => item.tpl);
 }
 
@@ -713,6 +736,35 @@ function drawEmotionLayer(data) {
     ctx.fillText(emotion, x + barWidth / 2, canvas.height - 15);
     ctx.fillText(count, x + barWidth / 2, y - 5);
   });
+
+  if (emotionTemplateSuggestions) {
+    emotionTemplateSuggestions.innerHTML = '';
+    const topEmotion = entries.sort((a, b) => b[1] - a[1])[0]?.[0];
+    if (topEmotion) {
+      const suggestions = suggestTemplatesFromEmotion(topEmotion);
+      suggestions.forEach(tpl => {
+        const card = document.createElement('div');
+        card.className = 'template-card';
+        const color = EMOTION_COLORS[topEmotion] || '#333';
+        card.style.background = color;
+
+        const nameEl = document.createElement('div');
+        nameEl.textContent = tpl.name;
+        card.appendChild(nameEl);
+
+        const previewEl = document.createElement('div');
+        previewEl.textContent = tpl.scaffold;
+        card.appendChild(previewEl);
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Insert into Scene';
+        btn.addEventListener('click', () => insertTemplateBeat(tpl.name));
+        card.appendChild(btn);
+
+        emotionTemplateSuggestions.appendChild(card);
+      });
+    }
+  }
 }
 
 function drawCharacterLayer(data) {
