@@ -183,6 +183,14 @@ const templateSelector = document.getElementById('template-selector');
 const insertTemplateBtn = document.getElementById('insert-template');
 const beatStack = document.getElementById('beat-stack');
 
+// Beat template scaffolds
+const beatTemplates = [
+  { name: 'emotional-turn', scaffold: 'Emotional Turn: Describe a change in feeling.' },
+  { name: 'reversal', scaffold: 'Reversal: An unexpected outcome occurs.' },
+  { name: 'internal-dilemma', scaffold: 'Internal Dilemma: Character faces a tough choice.' },
+  { name: 'power-shift', scaffold: 'Power Shift: Control moves to a different character.' }
+];
+
 // State
 let currentProject = null;
 let projects = {};
@@ -190,6 +198,7 @@ let currentSceneIndex = null;
 let autosaveTimer;
 let latestRayRayReply = '';
 let currentAnalysisResult = null;
+let currentSceneBeats = [];
 
 function getCurrentSceneTitle() {
   if (currentSceneIndex !== null && currentProject && projects[currentProject]) {
@@ -270,6 +279,70 @@ function updateWordCount() {
   wordCount.textContent = `Words: ${count}`;
 }
 
+// Render beat blocks based on currentSceneBeats
+function renderBeats() {
+  if (!beatStack) return;
+  beatStack.innerHTML = '';
+  currentSceneBeats.forEach((beat, index) => {
+    const textarea = document.createElement('textarea');
+    textarea.className = 'beat-block';
+    textarea.value = beat.content;
+    textarea.dataset.index = index;
+
+    const tpl = beatTemplates.find(t => t.scaffold === beat.content);
+    if (tpl) {
+      textarea.dataset.scaffold = tpl.scaffold;
+      // mark pristine if content matches scaffold
+      if (beat.content === tpl.scaffold) {
+        textarea.dataset.pristine = 'true';
+      }
+    }
+
+    textarea.addEventListener('focus', () => {
+      if (textarea.dataset.pristine === 'true' && textarea.value === textarea.dataset.scaffold) {
+        textarea.value = '';
+      }
+    });
+
+    textarea.addEventListener('input', () => {
+      textarea.dataset.pristine = 'false';
+      currentSceneBeats[index].content = textarea.value;
+    });
+
+    beatStack.appendChild(textarea);
+  });
+}
+
+// Insert a template beat and track it
+function insertTemplateBeat(templateName) {
+  const tpl = beatTemplates.find(t => t.name === templateName);
+  if (!tpl) return;
+
+  const beat = { type: 'Template', content: tpl.scaffold };
+  currentSceneBeats.push(beat);
+  const index = currentSceneBeats.length - 1;
+
+  const textarea = document.createElement('textarea');
+  textarea.className = 'beat-block';
+  textarea.value = tpl.scaffold;
+  textarea.dataset.scaffold = tpl.scaffold;
+  textarea.dataset.pristine = 'true';
+  textarea.dataset.index = index;
+
+  textarea.addEventListener('focus', () => {
+    if (textarea.dataset.pristine === 'true' && textarea.value === tpl.scaffold) {
+      textarea.value = '';
+    }
+  });
+
+  textarea.addEventListener('input', () => {
+    textarea.dataset.pristine = 'false';
+    currentSceneBeats[index].content = textarea.value;
+  });
+
+  if (beatStack) beatStack.appendChild(textarea);
+}
+
 // Render outline
 function renderOutline() {
   outlineContainer.innerHTML = '';
@@ -289,7 +362,8 @@ function addScene() {
   const newScene = {
     title: title,
     text: '',
-    notes: {}
+    notes: {},
+    beats: []
   };
   projects[currentProject].scenes.push(newScene);
   saveProjects();
@@ -303,6 +377,10 @@ function editScene(index) {
   const scene = projects[currentProject].scenes[index];
   sceneTitle.textContent = `✍️ ${scene.title}`;
   sceneText.value = scene.text || '';
+
+  // Load beats
+  currentSceneBeats = Array.isArray(scene.beats) ? scene.beats : [];
+  renderBeats();
   
   // Load scene notes
   const notes = scene.notes || {};
@@ -327,6 +405,7 @@ function saveScene() {
   
   const scene = projects[currentProject].scenes[currentSceneIndex];
   scene.text = sceneText.value;
+  scene.beats = currentSceneBeats;
   scene.notes = {
     goal: sceneGoal.value,
     emotion: sceneEmotion.value,
@@ -360,6 +439,8 @@ function autosaveScene() {
 function closeScene() {
   saveScene();
   currentSceneIndex = null;
+  currentSceneBeats = [];
+  if (beatStack) beatStack.innerHTML = '';
   sceneEditor.classList.add('hidden');
   outlineSection.classList.remove('hidden');
   drawer.classList.add('hidden');
@@ -1055,28 +1136,7 @@ addNoteBtn.onclick = addJunkNote;
 if (insertTemplateBtn) {
   insertTemplateBtn.addEventListener('click', () => {
     const tpl = templateSelector ? templateSelector.value : '';
-    let text = '';
-    switch (tpl) {
-      case 'emotional-turn':
-        text = 'Emotional Turn: Describe a change in feeling.';
-        break;
-      case 'reversal':
-        text = 'Reversal: An unexpected outcome occurs.';
-        break;
-      case 'internal-dilemma':
-        text = 'Internal Dilemma: Character faces a tough choice.';
-        break;
-      case 'power-shift':
-        text = 'Power Shift: Control moves to a different character.';
-        break;
-      default:
-        text = '';
-    }
-    const div = document.createElement('div');
-    div.className = 'beat-block';
-    div.contentEditable = true;
-    div.textContent = text;
-    if (beatStack) beatStack.appendChild(div);
+    insertTemplateBeat(tpl);
   });
 }
 
