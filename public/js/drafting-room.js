@@ -527,52 +527,32 @@ function drawCharacterLayer(data) {
   const canvas = document.getElementById('character-layer');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = 'rgba(226, 178, 255, 0.3)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = '#532766';
-  ctx.font = "24px 'Space Grotesk', sans-serif";
-  ctx.fillText("Character Timeline", 20, 40);
+
+  // Placeholder – waiting for real character data
 }
 
 function drawPacingLayer(data) {
   const canvas = document.getElementById('pacing-layer');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = 'rgba(178, 255, 226, 0.3)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = '#176b56';
-  ctx.font = "24px 'Space Grotesk', sans-serif";
-  ctx.fillText("Pacing Graph", 20, 40);
+
+  // Placeholder – waiting for real pacing data
 }
 
 function drawStructureLayer(data) {
   const canvas = document.getElementById('structure-layer');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = 'rgba(255, 250, 178, 0.3)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = '#99861d';
-  ctx.font = "24px 'Space Grotesk', sans-serif";
-  ctx.fillText("Structure Flow", 20, 40);
+
+  // Placeholder – waiting for real structure data
 }
 
 function drawThemeLayer(data) {
   const canvas = document.getElementById('theme-layer');
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = 'rgba(255, 194, 178, 0.3)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = '#a0341a';
-  ctx.font = "24px 'Space Grotesk', sans-serif";
-  ctx.fillText("Theme Network", 20, 40);
+
+  // Placeholder – waiting for real theme data
 }
 
 function redrawAllLayers(data) {
