@@ -85,3 +85,38 @@ export class Book {
   }
 }
 
+// Determine the dominant emotion for a scene
+export function getSceneTone(sceneObj) {
+  const heatmap = sceneObj && sceneObj.analysis && sceneObj.analysis.emotionHeatmap;
+  if (!heatmap || Object.keys(heatmap).length === 0) return 'neutral';
+  let top = 'neutral';
+  let max = -Infinity;
+  for (const [emotion, count] of Object.entries(heatmap)) {
+    if (count > max) {
+      max = count;
+      top = emotion;
+    }
+  }
+  return top;
+}
+
+// Run getSceneTone for every scene in the book structure
+export function getBookSceneTones(book) {
+  const tones = {};
+  if (!book || !book.actIds) return tones;
+  for (const actId of book.actIds) {
+    const act = loadItem(actId);
+    if (!act || !act.chapterIds) continue;
+    for (const chapterId of act.chapterIds) {
+      const chapter = loadItem(chapterId);
+      if (!chapter || !chapter.sceneIds) continue;
+      for (const sceneId of chapter.sceneIds) {
+        const scene = loadItem(sceneId);
+        if (!scene) continue;
+        tones[scene.id] = getSceneTone(scene);
+      }
+    }
+  }
+  return tones;
+}
+
