@@ -152,3 +152,35 @@ export function getTensionScore(sceneObj) {
   score = Math.round(Math.max(0, Math.min(10, score)));
   return score;
 }
+
+// Build a list of tension scores for every scene in the book
+// Returns an array of objects sorted in story order
+// [{ act, chapter, scene, tension, sceneId }, ...]
+export function buildTensionMap(bookObj) {
+  const map = [];
+  if (!bookObj || !bookObj.actIds) return map;
+
+  for (const actId of bookObj.actIds) {
+    const act = loadItem(actId);
+    if (!act || !act.chapterIds) continue;
+
+    for (const chapterId of act.chapterIds) {
+      const chapter = loadItem(chapterId);
+      if (!chapter || !chapter.sceneIds) continue;
+
+      for (const sceneId of chapter.sceneIds) {
+        const scene = loadItem(sceneId);
+        if (!scene) continue;
+        map.push({
+          act: act.name || 'Act',
+          chapter: chapter.name || 'Chapter',
+          scene: scene.title || 'Scene',
+          tension: getTensionScore(scene),
+          sceneId: scene.id
+        });
+      }
+    }
+  }
+
+  return map;
+}
