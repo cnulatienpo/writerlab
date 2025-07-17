@@ -1,8 +1,0 @@
-<div id="desire-quiz"></div>
-<script>
-  fetch('/games/rate.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('desire-quiz').innerHTML = html;
-    });
-</script>
