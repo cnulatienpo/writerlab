@@ -194,6 +194,25 @@ main {
   color: #ccc;
 }
 
+#template-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#beat-stack {
+  margin-bottom: 1em;
+}
+
+.beat-block {
+  background: #333;
+  padding: 0.5em;
+  margin: 0.25em 0;
+  border-radius: 4px;
+  color: #f4f4f4;
+}
+
 /* Visualizer */
 #visualizer-section {
   background: #1a1a1a;

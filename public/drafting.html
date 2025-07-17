@@ -45,6 +45,17 @@
 
       <section id="scene-editor" class="hidden">
         <h2 id="scene-title">✍️ Scene Editor</h2>
+        <div id="template-control">
+          <label for="template-selector">Insert Template:</label>
+          <select id="template-selector">
+            <option value="emotional-turn">Emotional Turn</option>
+            <option value="reversal">Reversal</option>
+            <option value="internal-dilemma">Internal Dilemma</option>
+            <option value="power-shift">Power Shift</option>
+          </select>
+          <button id="insert-template">Insert</button>
+        </div>
+        <div id="beat-stack"></div>
         <textarea id="scene-text" placeholder="Write your scene here..."></textarea>
         <div id="word-count">Words: 0</div>
         <button id="save-scene">Save My Work</button>
