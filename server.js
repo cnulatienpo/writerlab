@@ -60,6 +60,18 @@ app.get('/definitions/:filename', (req, res) => {
   });
 });
 
+// Provide list of available definition files
+app.get('/definitions-list', (req, res) => {
+  const dirPath = path.join(__dirname, 'definitions');
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error('Error reading definitions directory:', err);
+      return res.status(500).json({ error: 'Could not load definitions' });
+    }
+    res.json(files);
+  });
+});
+
 // Serve writer type profiles
 app.get('/profile/:type', (req, res) => {
   const slug = req.params.type.toLowerCase();

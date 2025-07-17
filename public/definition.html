@@ -36,6 +36,20 @@
     .back-button:hover {
       transform: scale(1.05);
     }
+    .next-button {
+      background: linear-gradient(135deg, #6bdbbd 80%, #e4fff8 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin-bottom: 20px;
+      transition: transform 0.2s;
+    }
+    .next-button:hover {
+      transform: scale(1.05);
+    }
     .content {
       background: rgba(255,255,255,0.06);
       border-radius: 12px;
@@ -58,7 +72,10 @@
 </head>
 <body>
   <div class="container">
-    <button class="back-button" onclick="history.back()">← Back to Literary Deviousness</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:10px;flex-wrap:wrap;">
+      <button class="back-button" onclick="history.back()">← Back to Literary Deviousness</button>
+      <button class="next-button" id="nextBtn">Next →</button>
+    </div>
     <h1 id="title">Loading...</h1>
     <div id="content" class="content loading">Loading definition...</div>
   </div>
@@ -99,6 +116,24 @@
         console.error('Error loading definition:', error);
       }
     }
+
+    // Setup next button based on definitions list
+    fetch('/definitions-list')
+      .then(res => res.json())
+      .then(files => {
+        const index = files.indexOf(filename);
+        if (index !== -1 && index + 1 < files.length) {
+          const nextFile = files[index + 1];
+          document.getElementById('nextBtn').onclick = () => {
+            window.location.href = 'definition.html?file=' + encodeURIComponent(nextFile);
+          };
+        } else {
+          document.getElementById('nextBtn').style.display = 'none';
+        }
+      })
+      .catch(() => {
+        document.getElementById('nextBtn').style.display = 'none';
+      });
   </script>
 </body>
 </html>
