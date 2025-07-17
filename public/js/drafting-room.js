@@ -185,11 +185,42 @@ const beatStack = document.getElementById('beat-stack');
 
 // Beat template scaffolds
 const beatTemplates = [
-  { name: 'emotional-turn', scaffold: 'Emotional Turn: Describe a change in feeling.' },
-  { name: 'reversal', scaffold: 'Reversal: An unexpected outcome occurs.' },
-  { name: 'internal-dilemma', scaffold: 'Internal Dilemma: Character faces a tough choice.' },
-  { name: 'power-shift', scaffold: 'Power Shift: Control moves to a different character.' }
+  {
+    name: 'Emotional Turn',
+    scaffold: 'The character feels [emotion] until [event] flips it to [new emotion].',
+    tags: ['emotion', 'turn', 'internal', 'Act II']
+  },
+  {
+    name: 'Power Shift',
+    scaffold: '[Character] gains or loses control after [event].',
+    tags: ['structure', 'tension', 'Act III']
+  },
+  {
+    name: 'Setup',
+    scaffold: 'We introduce [idea/item] that will matter later.',
+    tags: ['foreshadow', 'Act I', 'calm']
+  },
+  {
+    name: 'Escalation',
+    scaffold: '[Conflict] gets worse as [complication] is introduced.',
+    tags: ['tension', 'Act II', 'fast']
+  }
 ];
+
+// Suggest templates based on context tags
+function suggestTemplates(context = {}) {
+  const values = Object.values(context);
+  return beatTemplates
+    .map(tpl => {
+      const matchCount = tpl.tags ? tpl.tags.reduce((count, tag) => {
+        return values.includes(tag) ? count + 1 : count;
+      }, 0) : 0;
+      return { tpl, matchCount };
+    })
+    .filter(item => item.matchCount > 0)
+    .sort((a, b) => b.matchCount - a.matchCount)
+    .map(item => item.tpl);
+}
 
 // State
 let currentProject = null;
