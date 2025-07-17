@@ -208,6 +208,13 @@ main {
   margin-bottom: 0.5em;
 }
 
+#contextual-template-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
 #emotion-template-suggestions {
   display: flex;
   flex-wrap: wrap;
