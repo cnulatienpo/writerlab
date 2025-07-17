@@ -46,6 +46,7 @@
       <section id="scene-editor" class="hidden">
         <h2 id="scene-title">✍️ Scene Editor</h2>
         <div id="template-control">
+          <button id="suggest-template">🧠 Suggest Template</button>
           <label for="template-selector">Insert Template:</label>
           <select id="template-selector">
             <option value="Emotional Turn">Emotional Turn</option>
@@ -55,6 +56,7 @@
           </select>
           <button id="insert-template">Insert</button>
         </div>
+        <div id="template-suggestions" class="hidden"></div>
         <div id="beat-stack"></div>
         <textarea id="scene-text" placeholder="Write your scene here..."></textarea>
         <div id="word-count">Words: 0</div>
@@ -90,6 +92,7 @@
         <label>Goal: <input type="text" id="scene-goal"/></label>
         <label>Emotion: <input type="text" id="scene-emotion"/></label>
         <label>Characters: <input type="text" id="scene-characters"/></label>
+        <label>Act: <input type="text" id="scene-act"/></label>
         <div class="slider-group">
           <label>Desire: <input type="range" min="0" max="5" id="desire-slider" /></label>
           <label>Conflict: <input type="range" min="0" max="5" id="conflict-slider" /></label>

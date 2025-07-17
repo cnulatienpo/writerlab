@@ -174,6 +174,7 @@ const feedbackContent = document.getElementById('feedback-content');
 const sceneGoal = document.getElementById('scene-goal');
 const sceneEmotion = document.getElementById('scene-emotion');
 const sceneCharacters = document.getElementById('scene-characters');
+const sceneAct = document.getElementById('scene-act');
 const desireSlider = document.getElementById('desire-slider');
 const conflictSlider = document.getElementById('conflict-slider');
 const revealSlider = document.getElementById('reveal-slider');
@@ -181,6 +182,8 @@ const sceneNote = document.getElementById('scene-note');
 
 const templateSelector = document.getElementById('template-selector');
 const insertTemplateBtn = document.getElementById('insert-template');
+const suggestTemplateBtn = document.getElementById('suggest-template');
+const templateSuggestions = document.getElementById('template-suggestions');
 const beatStack = document.getElementById('beat-stack');
 
 // Beat template scaffolds
@@ -220,6 +223,39 @@ function suggestTemplates(context = {}) {
     .filter(item => item.matchCount > 0)
     .sort((a, b) => b.matchCount - a.matchCount)
     .map(item => item.tpl);
+}
+
+function collectContext() {
+  const emotions = [];
+  if (currentAnalysisResult && currentAnalysisResult.emotionHeatmap) {
+    const sorted = Object.entries(currentAnalysisResult.emotionHeatmap)
+      .sort((a, b) => b[1] - a[1])
+      .filter(([, c]) => c > 0);
+    sorted.slice(0, 2).forEach(([e]) => emotions.push(e));
+  }
+
+  let pacing = 'medium';
+  if (currentAnalysisResult && currentAnalysisResult.telemetry) {
+    const avg = currentAnalysisResult.telemetry.avgSentenceLength || 0;
+    if (avg > 18) pacing = 'slow';
+    else if (avg > 12) pacing = 'medium';
+    else pacing = 'fast';
+  }
+
+  let act = '';
+  if (currentProject && currentSceneIndex !== null) {
+    const scene = projects[currentProject].scenes[currentSceneIndex];
+    act = (scene.notes && scene.notes.act) || '';
+  }
+  if (sceneAct && sceneAct.value) {
+    act = sceneAct.value;
+  }
+
+  return {
+    emotion: emotions.join(', '),
+    pacing,
+    act
+  };
 }
 
 // State
@@ -418,6 +454,7 @@ function editScene(index) {
   sceneGoal.value = notes.goal || '';
   sceneEmotion.value = notes.emotion || '';
   sceneCharacters.value = notes.characters || '';
+  sceneAct.value = notes.act || '';
   desireSlider.value = notes.desire || 0;
   conflictSlider.value = notes.conflict || 0;
   revealSlider.value = notes.reveal || 0;
@@ -441,6 +478,7 @@ function saveScene() {
     goal: sceneGoal.value,
     emotion: sceneEmotion.value,
     characters: sceneCharacters.value,
+    act: sceneAct.value,
     desire: parseInt(desireSlider.value),
     conflict: parseInt(conflictSlider.value),
     reveal: parseInt(revealSlider.value)
@@ -507,6 +545,7 @@ function saveSceneNotes() {
     goal: sceneGoal.value,
     emotion: sceneEmotion.value,
     characters: sceneCharacters.value,
+    act: sceneAct.value,
     desire: parseInt(desireSlider.value),
     conflict: parseInt(conflictSlider.value),
     reveal: parseInt(revealSlider.value)
@@ -1127,7 +1166,7 @@ if (analyzeSceneBtn) {
 }
 
 // Scene notes auto-save
-[sceneGoal, sceneEmotion, sceneCharacters, desireSlider, conflictSlider, revealSlider].forEach(el => {
+[sceneGoal, sceneEmotion, sceneCharacters, sceneAct, desireSlider, conflictSlider, revealSlider].forEach(el => {
   el.addEventListener('input', saveSceneNotes);
 });
 sceneNote.addEventListener('input', saveSceneNote);
@@ -1168,6 +1207,39 @@ if (insertTemplateBtn) {
   insertTemplateBtn.addEventListener('click', () => {
     const tpl = templateSelector ? templateSelector.value : '';
     insertTemplateBeat(tpl);
+  });
+}
+
+if (suggestTemplateBtn) {
+  suggestTemplateBtn.addEventListener('click', () => {
+    const context = collectContext();
+    const suggestions = suggestTemplates(context).slice(0, 3);
+    if (templateSuggestions) {
+      templateSuggestions.innerHTML = '';
+      suggestions.forEach(tpl => {
+        const card = document.createElement('div');
+        card.className = 'template-card';
+
+        const nameEl = document.createElement('div');
+        nameEl.textContent = tpl.name;
+        card.appendChild(nameEl);
+
+        const previewEl = document.createElement('div');
+        previewEl.textContent = tpl.scaffold;
+        card.appendChild(previewEl);
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Insert';
+        btn.addEventListener('click', () => {
+          insertTemplateBeat(tpl.name);
+          templateSuggestions.innerHTML = '';
+        });
+        card.appendChild(btn);
+
+        templateSuggestions.appendChild(card);
+      });
+      templateSuggestions.classList.remove('hidden');
+    }
   });
 }
 
