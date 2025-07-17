@@ -161,6 +161,7 @@ const junkDrawer = document.getElementById('junk-drawer');
 const toggleJunkDrawerBtn = document.getElementById('toggle-junk');
 const addNoteBtn = document.getElementById('add-note');
 const notesContainer = document.getElementById('notes-container');
+const junkDrawerText = document.getElementById('junk-drawer-text');
 
 const wordCount = document.getElementById('word-count');
 const visualizerSection = document.getElementById('visualizer-section');
@@ -176,6 +177,7 @@ const sceneCharacters = document.getElementById('scene-characters');
 const desireSlider = document.getElementById('desire-slider');
 const conflictSlider = document.getElementById('conflict-slider');
 const revealSlider = document.getElementById('reveal-slider');
+const sceneNote = document.getElementById('scene-note');
 
 // State
 let currentProject = null;
@@ -238,6 +240,7 @@ function loadProject(name) {
   currentProject = name;
   storyCheckInput.value = projects[name].storyCheck || '';
   renderOutline();
+  loadJunkDrawer();
   storyCheckSection.classList.remove('hidden');
   outlineSection.classList.remove('hidden');
   sceneEditor.classList.add('hidden');
@@ -305,6 +308,8 @@ function editScene(index) {
   desireSlider.value = notes.desire || 0;
   conflictSlider.value = notes.conflict || 0;
   revealSlider.value = notes.reveal || 0;
+
+  loadSceneNote();
   
   sceneEditor.classList.remove('hidden');
   outlineSection.classList.add('hidden');
@@ -326,7 +331,8 @@ function saveScene() {
     conflict: parseInt(conflictSlider.value),
     reveal: parseInt(revealSlider.value)
   };
-  
+  saveSceneNote();
+
   saveProjects();
   renderOutline();
   updateSceneSidebar();
@@ -392,15 +398,33 @@ function saveSceneNotes() {
   saveProjects();
 }
 
+function saveSceneNote() {
+  if (!currentProject || currentSceneIndex === null) return;
+  const key = `sceneNote_${currentProject}_${currentSceneIndex}`;
+  localStorage.setItem(key, sceneNote.value);
+}
+
+function loadSceneNote() {
+  if (!currentProject || currentSceneIndex === null) return;
+  const key = `sceneNote_${currentProject}_${currentSceneIndex}`;
+  sceneNote.value = localStorage.getItem(key) || '';
+}
+
 // ===============================================
 // JUNK DRAWER NOTES
 // ===============================================
 
-const JUNK_KEY = 'junkDrawerNotes';
+const JUNK_PREFIX = 'junkDrawer_';
 let junkDrawerNotes = [];
 
+function getJunkKey() {
+  return `${JUNK_PREFIX}${currentProject || 'default'}`;
+}
+
 function saveJunkDrawer(notes) {
-  localStorage.setItem(JUNK_KEY, JSON.stringify(notes));
+  const key = getJunkKey();
+  const payload = { text: junkDrawerText.value, notes };
+  localStorage.setItem(key, JSON.stringify(payload));
 }
 
 function appendJunkNote(note) {
@@ -436,8 +460,11 @@ function appendJunkNote(note) {
 }
 
 function loadJunkDrawer() {
-  const data = localStorage.getItem(JUNK_KEY);
-  junkDrawerNotes = data ? JSON.parse(data) : [];
+  const key = getJunkKey();
+  const data = localStorage.getItem(key);
+  let parsed = data ? JSON.parse(data) : {};
+  junkDrawerText.value = parsed.text || '';
+  junkDrawerNotes = parsed.notes || [];
   notesContainer.innerHTML = '';
   junkDrawerNotes.forEach(note => appendJunkNote(note));
 }
@@ -967,6 +994,8 @@ if (analyzeSceneBtn) {
 [sceneGoal, sceneEmotion, sceneCharacters, desireSlider, conflictSlider, revealSlider].forEach(el => {
   el.addEventListener('input', saveSceneNotes);
 });
+sceneNote.addEventListener('input', saveSceneNote);
+junkDrawerText.addEventListener('input', () => saveJunkDrawer(junkDrawerNotes));
 
 // UI toggles
 toggleDrawerBtn.onclick = () => drawer.classList.toggle('hidden');
