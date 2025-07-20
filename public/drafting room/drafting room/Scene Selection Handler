@@ -1,0 +1,28 @@
+function getSceneById(id) {
+  const scenes = getAllScenes();
+  return scenes.find(scene => scene.id === id);
+}
+
+// Holds the latest analysis so other modules can reuse it
+let currentAnalysisResult = null;
+
+function selectSceneForRayRay(sceneId, listItem) {
+  // Highlight the selected scene
+  document.querySelectorAll('#scene-list li').forEach(li => li.classList.remove('active'));
+  if (listItem) listItem.classList.add('active');
+
+  const scene = getSceneById(sceneId);
+  if (!scene || !scene.title) return;
+
+  const fullScene = getSceneByTitle(scene.title);
+  if (!fullScene) return;
+
+  const text = fullScene.content || fullScene.text || '';
+  currentAnalysisResult = runAllDataAnalysis(text);
+  redrawAllLayers(currentAnalysisResult);
+
+  // Open Ray Ray chat if needed
+  document.getElementById('rayray-container').classList.add('open');
+  // Autofill Ray Ray's input with feedback request
+  document.getElementById('rayray-input').value = `Give me feedback on "${scene.title}"`;
+}
