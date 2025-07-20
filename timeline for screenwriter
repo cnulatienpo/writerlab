@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Screenplay Timeline</title>
+  <style>
+    body { font-family: sans-serif; }
+    #timeline {
+      display: flex;
+      align-items: flex-end;
+      margin-top: 40px;
+      height: 80px;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      padding: 16px 8px 16px 8px;
+      position: relative;
+      background: #f4f4f4;
+      overflow-x: auto;
+    }
+    .scene-block {
+      height: 40px;
+      margin-right: 8px;
+      background: #b6d6f5;
+      border-radius: 8px;
+      position: relative;
+      min-width: 50px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .scene-block.active { background: #ffd166; }
+    #playhead {
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 4px;
+      height: 60px;
+      background: #ef476f;
+      border-radius: 2px;
+      pointer-events: none;
+      transition: left 0.2s;
+    }
+    #controls {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    #current-info {
+      margin-top: 16px;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Screenplay Timeline Demo</h2>
+  <div id="timeline">
+    <div id="playhead"></div>
+  </div>
+  <div id="controls">
+    <button id="playBtn">Play</button>
+    <button id="pauseBtn">Pause</button>
+    <span id="timer">0:00</span>
+  </div>
+  <div id="current-info"></div>
+
+  <script>
+    // Example screenplay scene data (would be dynamic in real app)
+    const scenes = [
+      { heading: "INT. BEDROOM – NIGHT", lines: 45 },
+      { heading: "EXT. STREET – DAY", lines: 65 },
+      { heading: "INT. CAFE – MORNING", lines: 52 },
+      { heading: "EXT. PARK – DAY", lines: 33 },
+    ];
+
+    // 55 lines = 1 page = 1 minute
+    const LINES_PER_PAGE = 55;
+
+    // Calculate durations and timeline sizes
+    let totalMinutes = 0;
+    scenes.forEach(scene => {
+      scene.pages = scene.lines / LINES_PER_PAGE;
+      scene.minutes = scene.pages; // 1 page = 1 min
+      totalMinutes += scene.minutes;
+    });
+
+    // Render timeline
+    const timeline = document.getElementById('timeline');
+    const playhead = document.getElementById('playhead');
+    let timelineWidth = 0;
+
+    scenes.forEach((scene, idx) => {
+      const block = document.createElement('div');
+      block.className = 'scene-block';
+      block.style.width = `${scene.minutes * 60}px`; // 1 min = 60px wide
+      block.innerText = scene.heading + `\n${scene.minutes.toFixed(1)} min`;
+      block.dataset.idx = idx;
+      timeline.appendChild(block);
+      timelineWidth += scene.minutes * 60 + 8;
+    });
+
+    // Play/pause/seek logic
+    let playing = false;
+    let currentTime = 0; // in seconds
+    let animationFrame = null;
+
+    function updatePlayhead() {
+      // totalMinutes to seconds
+      const totalSec = totalMinutes * 60;
+      const percent = currentTime / totalSec;
+      const timelinePx = timeline.scrollWidth;
+      playhead.style.left = `${percent * (timelinePx - 4)}px`;
+      updateCurrentInfo();
+    }
+
+    function updateCurrentInfo() {
+      // Figure out which scene we are in
+      let elapsed = 0;
+      let currentIdx = 0;
+      for (let i = 0; i < scenes.length; i++) {
+        elapsed += scenes[i].minutes * 60;
+        if (currentTime < elapsed) {
+          currentIdx = i;
+          break;
+        }
+      }
+      // Highlight active scene
+      document.querySelectorAll('.scene-block').forEach((b, idx) => {
+        b.classList.toggle('active', idx === currentIdx);
+      });
+      // Info display
+      const min = Math.floor(currentTime / 60);
+      const sec = Math.floor(currentTime % 60).toString().padStart(2, '0');
+      document.getElementById('timer').innerText = `${min}:${sec}`;
+      document.getElementById('current-info').innerText =
+        `Current Scene: ${scenes[currentIdx].heading} (${scenes[currentIdx].minutes.toFixed(1)} min)`;
+    }
+
+    function play() {
+      playing = true;
+      function step() {
+        if (!playing) return;
+        currentTime += 0.25;
+        if (currentTime >= totalMinutes * 60) {
+          currentTime = totalMinutes * 60;
+          pause();
+        }
+        updatePlayhead();
+        animationFrame = requestAnimationFrame(step);
+      }
+      step();
+    }
+
+    function pause() {
+      playing = false;
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+    }
+
+    document.getElementById('playBtn').onclick = () => {
+      if (!playing) play();
+    };
+    document.getElementById('pauseBtn').onclick = pause;
+
+    // Click timeline to jump
+    timeline.onclick = e => {
+      if (!e.target.classList.contains('scene-block')) return;
+      const idx = +e.target.dataset.idx;
+      let elapsed = 0;
+      for (let i = 0; i < idx; i++) elapsed += scenes[i].minutes * 60;
+      currentTime = elapsed;
+      updatePlayhead();
+    };
+
+    // Initialize
+    updatePlayhead();
+
+  </script>
+</body>
+</html>
