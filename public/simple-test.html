@@ -1,59 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Simple Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f0f8ff;
-        }
-        .big-text {
-            font-size: 24px;
-            color: #333;
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .test-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px;
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-        }
-        .test-button:hover {
-            background: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Test Elements</title>
+  <script>
+    window.onload = function() {
+      window.open('elements.html', '_blank');
+    };
+  </script>
 </head>
 <body>
-    <div class="big-text">
-        <h1>🎯 SIMPLE TEST PAGE</h1>
-        <p>If you can see this, the page is loading correctly!</p>
-        <button class="test-button" onclick="showAlert()">Click Me!</button>
-        <div id="output" style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 5px;">
-            Waiting for button click...
-        </div>
-    </div>
-
-    <script>
-        function showAlert() {
-            document.getElementById('output').innerHTML = '✅ JavaScript is working! Page loaded successfully at ' + new Date().toLocaleTimeString();
-        }
-        
-        // Auto-run test
-        setTimeout(function() {
-            document.getElementById('output').innerHTML = '✅ Page loaded automatically at ' + new Date().toLocaleTimeString();
-        }, 1000);
-    </script>
+  <p>If the page does not open automatically, <a href="elements.html" target="_blank">click here</a>.</p>
 </body>
 </html>
