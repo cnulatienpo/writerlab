@@ -81,9 +81,9 @@ export default function Home() {
             <p>Most had what I call the Star Wars disease. George Lucas talked about Joseph Campbell, and suddenly every writing book said “just follow the three-act structure and boom—and you will start bleeding money out of your eyeballs. #1 best seller- i promise.”</p>
             <p>But they never explained what goes into those acts. They assumed you already knew how to use literary devices. I didn’t. So I felt stupid. Not creative enough. Not talented enough. i thought being a good writer meant i was already supposed to know all that.</p>
             <p>So i bought every book on the market and studied them. but they have a big problem- you cant talk to them and ask questions. and what if they write it for the type of writer you’re not? then you just wasted your time.</p>
-            <p>So I built a game. It’s called Writer Lab.<br />Here’s what it does:</p>
+            <p>So I built this site to teach myself, and i thought maybe you could use it too.<br />Here’s what it does:</p>
             <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem' }}>
-              <li>Teaches fiction writing one literary device at a time</li>
+              <li></li>
               
               <li>There’s a simple built-in AI named RayRay who answers your questions if you get stuck<br />(He's slow and forgets everything between chats, but he's trying his best)</li>
             </ul>
@@ -92,13 +92,19 @@ export default function Home() {
           </div>
         </div>
         <div style={{ flex: 1, minWidth: 260, display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <a href="/deviousness" className="tile" style={{ textAlign: 'center', textDecoration: 'none', color: '#f4f4f4', border: '2px solid #f4f4f4', borderRadius: 8, padding: '1.5rem 1rem', transition: 'background 0.2s' }}>
-            <strong>Literary Deviousness</strong>
-            <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
-              These are the building blocks of storytelling
-            </div>
-          </a>
-          <a href="/public/drafting.html" className="tile" style={{ textAlign: 'center', textDecoration: 'none', color: '#f4f4f4', border: '2px solid #f4f4f4', borderRadius: 8, padding: '1.5rem 1rem', transition: 'background 0.2s' }}>
+          <a
+            href="/drafting.html"
+            className="tile"
+            style={{
+              textAlign: 'center',
+              textDecoration: 'none',
+              color: '#f4f4f4',
+              border: '2px solid #f4f4f4',
+              borderRadius: 8,
+              padding: '1.5rem 1rem',
+              transition: 'background 0.2s'
+            }}
+          >
             <strong>Drafting Room</strong>
             <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
               Open the interactive scene builder and feedback tools.
