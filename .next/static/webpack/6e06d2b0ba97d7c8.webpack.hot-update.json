@@ -1,0 +1,1 @@
+{"c":["pages/index","webpack"],"r":["pages/definitions/[slug]"],"m":["(pages-dir-browser)/./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=%2Fworkspaces%2Fwriterlab%2Fpages%2Fdefinitions%2F%5Bslug%5D.js&page=%2Fdefinitions%2F%5Bslug%5D!","(pages-dir-browser)/./pages/definitions/[slug].js"]}
