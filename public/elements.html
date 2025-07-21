@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+<<<<<<< HEAD
   <title>Literary Deviousness</title>
+=======
+  <title>Projects from the Projects</title>
+>>>>>>> d1a4fb7c8ad3dcae32a8fa23a190f0dd28aaab44
   <style>
     body {
       background: #23282e;
@@ -91,6 +95,7 @@
 </head>
 <body>
   <h1>Literary Deviousness</h1>
+<<<<<<< HEAD
   <p class="intro">Literary Devices are what writing is made up of. These are the foundation.</p>
   <button id="drafting-area" onclick="goTo('drafting')">Drafting Area</button>
   <div class="element-grid" id="elements"></div>
@@ -98,6 +103,80 @@
   <script>
     function goTo(page) {
       window.location.href = page + '.html';
+=======
+  <button id="drafting-area" class="da" onclick="goTo('drafting')">Drafting Area</button>
+  <div class="element-table">
+    <button class="element fo unlocked" onclick="goTo('foundation')">
+      <span class="abbr">Fo</span>
+      <span class="name">Foundation</span>
+    </button>
+    <button class="element ch unlocked" onclick="goTo('desire')">
+      <span class="abbr">De</span>
+      <span class="name">Desire</span>
+    </button>
+    <button class="element di unlocked" onclick="goTo('stakes')">
+      <span class="abbr">St</span>
+      <span class="name">Stakes</span>
+    </button>
+    <button class="element po unlocked" onclick="goTo('conflict')">
+      <span class="abbr">Co</span>
+      <span class="name">Conflict</span>
+    </button>
+    <button class="element cd unlocked" onclick="goTo('decision')">
+      <span class="abbr">De</span>
+      <span class="name">Decision</span>
+    </button>
+    <button class="element ss unlocked" onclick="goTo('change')">
+      <span class="abbr">Ch</span>
+      <span class="name">Change</span>
+    </button>
+    <button class="element se unlocked" onclick="goTo('scene')">
+      <span class="abbr">SE</span>
+      <span class="name">Scene Enders</span>
+    </button>
+    <button class="element pa unlocked" onclick="goTo('pacing')">
+      <span class="abbr">Pa</span>
+      <span class="name">Pacing</span>
+    </button>
+  </div>
+  <script>
+    async function goTo(element) {
+      // Fetch the content dynamically from the corresponding file
+      const response = await fetch(`/definitions/${element} def.txt`);
+      if (response.ok) {
+        const content = await response.text();
+        // Create a new page to display the content
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>${element} Definition</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                line-height: 1.6;
+              }
+              pre {
+                background: #f4f4f4;
+                padding: 10px;
+                border-radius: 5px;
+                overflow-x: auto;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${element} Definition</h1>
+            <pre>${content}</pre>
+          </body>
+          </html>
+        `);
+      } else {
+        alert('Failed to load content.');
+      }
+>>>>>>> d1a4fb7c8ad3dcae32a8fa23a190f0dd28aaab44
     }
 
     function goToDefinition(filename) {

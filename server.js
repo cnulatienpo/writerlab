@@ -6,6 +6,7 @@ const authRoutes = require('./auth/authRoutes');
 require('dotenv').config();
 const rateLimit = require('express-rate-limit');
 const fs = require('fs');
+<<<<<<< HEAD
 const https = require('https');
 
 const app = express();
@@ -72,6 +73,32 @@ app.get('/definitions-list', (req, res) => {
   });
 });
 
+=======
+const https = require('https');
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// Global rate limit: 100 requests per minute per IP
+app.use(rateLimit({
+  windowMs: 1 * 60 * 1000,  // 1 minute
+  max: 100,                 // max requests per minute
+  standardHeaders: true,
+  legacyHeaders: false,
+}));
+
+app.use(session({
+  secret: 'super-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(express.static('public'));
+app.use('/auth', authRoutes);
+app.use(express.static(path.join(__dirname, 'views')));
+
+>>>>>>> d1a4fb7c8ad3dcae32a8fa23a190f0dd28aaab44
 // Serve writer type profiles
 app.get('/profile/:type', (req, res) => {
   const slug = req.params.type.toLowerCase();
@@ -88,6 +115,7 @@ app.get('/profile/:type', (req, res) => {
       `background:#f4f4f4;color:#111;}#content{white-space:pre-wrap;}</style></head>` +
       `<body><div id="content">${data.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` +
       `<button id="start">Start Game</button>` +
+<<<<<<< HEAD
       `<script>document.getElementById('start').onclick=()=>{location.href='/elements.html';}</script>` +
       `</body></html>`
     );
@@ -112,6 +140,12 @@ app.get('/privacy', (req, res) => {
       `<style>body{background:#111;color:#f4f4f4;font-family:'Space Grotesk',sans-serif;padding:2rem;line-height:1.5;}pre{white-space:pre-wrap;}a{color:#f4f4f4;}</style>` +
       `</head><body><pre>${escaped}</pre></body></html>`
     );
+=======
+      `<script src="/quiz-embed.js"></script>` +
+      `<script>document.getElementById('start').onclick=()=>{location.href='/elements.html';}</script>` +
+      `</body></html>`
+    );
+>>>>>>> d1a4fb7c8ad3dcae32a8fa23a190f0dd28aaab44
   });
 });
 
