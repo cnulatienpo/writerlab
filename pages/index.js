@@ -84,9 +84,7 @@ export default function Home() {
             <p>So I built a game. It’s called Writer Lab.<br />Here’s what it does:</p>
             <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem' }}>
               <li>Teaches fiction writing one literary device at a time</li>
-              <li>Each one has its own writing challenge</li>
-              <li>The prompts are structured and specific (no vague "just write!" stuff)</li>
-              <li>You get tested on the element after learning it—so you actually know if it clicked</li>
+              
               <li>There’s a simple built-in AI named RayRay who answers your questions if you get stuck<br />(He's slow and forgets everything between chats, but he's trying his best)</li>
             </ul>
             <p style={{ fontWeight: 600 }}>The big idea?</p>
