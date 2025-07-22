@@ -78,7 +78,7 @@ export default function Home() {
             <p style={{ marginBottom: '1.5rem', fontWeight: 600 }}>I made a game to learn the literary devices I was never taught.</p>
             <p>Here’s what happened: I read a lot as a kid. Decided I wanted to be a writer. Bought all the how-to-write books. And none of them made any damn sense to me.</p>
             <p>They all assumed I already knew something I didn’t: the actual parts of writing.</p>
-            <p>Most had what I call the Star Wars disease. George Lucas talked about Joseph Campbell, and suddenly every writing book said “just follow the three-act structure and boom—and you will start bleeding money out of your eyeballs. #1 best seller- i promise.”</p>
+            <p>Most had what I call the Star Wars disease. George Lucas talked about Joseph Campbell, and suddenly every writing book said “just follow the three-act structure and hit publish button—and you will start bleeding money out of your eyeballs. #1 best seller- i promise.”</p>
             <p>But they never explained what goes into those acts. They assumed you already knew how to use literary devices. I didn’t. So I felt stupid. Not creative enough. Not talented enough. i thought being a good writer meant i was already supposed to know all that.</p>
             <p>So i bought every book on the market and studied them. but they have a big problem- you cant talk to them and ask questions. and what if they write it for the type of writer you’re not? then you just wasted your time.</p>
             <p>So I built this site to teach myself, and i thought maybe you could use it too.<br />Here’s what it does:</p>
