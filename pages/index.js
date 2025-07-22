@@ -72,12 +72,66 @@ export default function Home() {
         </div>
       </header>
 
-      <a href="/deviousness" className="tile" style={{ display: 'block', maxWidth: 300, margin: '2rem auto', textAlign: 'center', textDecoration: 'none', color: '#f4f4f4', border: '2px solid #f4f4f4', borderRadius: 8, padding: '1.5rem 1rem', transition: 'background 0.2s' }}>
-        <strong>Literary Deviousness</strong>
-        <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
-          Learn the Craft
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: '3rem', margin: '2rem auto', maxWidth: 1100 }}>
+        <div style={{ flex: 2, minWidth: 320 }}>
+          <div style={{ background: 'rgba(30,30,30,0.95)', borderRadius: 8, padding: '2rem', color: '#f4f4f4', fontSize: '1.08rem', lineHeight: '1.7', boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }}>
+            <p style={{ marginBottom: '1.5rem', fontWeight: 600 }}>I made a game to learn the literary devices I was never taught.</p>
+            <p>Here’s what happened: I read a lot as a kid. Decided I wanted to be a writer. Bought all the how-to-write books. And none of them made any damn sense to me.</p>
+            <p>They all assumed I already knew something I didn’t: the actual parts of writing.</p>
+            <p>Most had what I call the Star Wars disease. George Lucas talked about Joseph Campbell, and suddenly every writing book said “just follow the three-act structure and hit publish button—and you will start bleeding money out of your eyeballs. #1 best seller- i promise.”</p>
+            <p>But they never explained what goes into those acts. They assumed you already knew how to use literary devices. I didn’t. So I felt stupid. Not creative enough. Not talented enough. i thought being a good writer meant i was already supposed to know all that.</p>
+            <p>So i bought every book on the market and studied them. but they have a big problem- you cant talk to them and ask questions. and what if they write it for the type of writer you’re not? then you just wasted your time.</p>
+            <p>So I built this site to teach myself, and i thought maybe you could use it too.<br />Here’s what it does:</p>
+            <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem' }}>
+              <li></li>
+              
+              <li>There’s a simple built-in AI named RayRay who answers your questions if you get stuck<br />(He's slow and forgets everything between chats, but he's trying his best)</li>
+            </ul>
+            <p style={{ fontWeight: 600 }}>The big idea?</p>
+            <p>I started thinking of literary devices like elements on a periodic table—and stories like experiments. It takes the pressure off.</p>
+          </div>
         </div>
-      </a>
+        <div style={{ flex: 1, minWidth: 260, display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <a
+            href="/drafting.html"
+            className="tile"
+            style={{
+              textAlign: 'center',
+              textDecoration: 'none',
+              color: '#f4f4f4',
+              border: '2px solid #f4f4f4',
+              borderRadius: 8,
+              padding: '1.5rem 1rem',
+              transition: 'background 0.2s',
+              marginBottom: '2rem'
+            }}
+          >
+            <strong>Drafting Room</strong>
+            <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
+              Open the interactive scene builder and feedback tools.
+            </div>
+          </a>
+
+          <a
+            href="/deviousness"
+            className="tile"
+            style={{
+              textAlign: 'center',
+              textDecoration: 'none',
+              color: '#f4f4f4',
+              border: '2px solid #f4f4f4',
+              borderRadius: 8,
+              padding: '1.5rem 1rem',
+              transition: 'background 0.2s'
+            }}
+          >
+            <strong>Literary Deviousness</strong>
+            <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
+              The building blocks of writing
+            </div>
+          </a>
+        </div>
+      </div>
 
       <footer>
         &copy; 2025 Projects from the Projects.

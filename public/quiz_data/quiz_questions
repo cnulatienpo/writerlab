@@ -1,105 +1,379 @@
-1. What’s your happy place as a writer?
-I want a detailed template, a prompt, a pile of tropes, or a fill-in-the-blanks outline to riff on—don’t make me invent it all from scratch.
+[
+  {
+    "question": "How do you get unstuck?",
+    "choices": [
+      { "text": "Swipe an idea from a movie, book, or stranger on the train—then twist it.", "type": 2 },
+      { "text": "Act out the scene, voice the dialogue, move until it’s real.", "type": 3 },
+      { "text": "Consult my plot spreadsheet, lore docs, or backstory bible until it clicks.", "type": 8 },
+      { "text": "Jump to a wild new scene, a strange direction, or another story altogether.", "type": 5 },
+      { "text": "Spin the trope wheel, fill in a prompt, or use an outline to give me a starting place—never blank, never endless questions.", "type": 1 },
+      { "text": "Dump my feelings into a poem, journal, or messy monologue and sort it out later.", "type": 6 },
+      { "text": "Draw diagrams, use sticky notes, color-code for echoes and motifs.", "type": 4 },
+      { "text": "Ask the story or characters what’s next and wait until they tell me.", "type": 9 },
+      { "text": "Ask myself what I’m really trying to say and make it bigger, louder, or clearer.", "type": 10 },
+      { "text": "Give myself a challenge: “Write backwards, only questions, 100 words max—go!”", "type": 7 }
+    ]
+  },
+  {
+    "question": "After a draft, you feel:",
+    "choices": [
+      { "text": "Looking for the next writing challenge.", "type": 7 },
+      { "text": "Satisfied with a color-coded outline and word count.", "type": 1 },
+      { "text": "Emotionally hungover.", "type": 6 },
+      { "text": "Surprised I finished, ready to start over.", "type": 5 },
+      { "text": "Excited to see what I “borrowed.”", "type": 2 },
+      { "text": "Dreaming up lore for the sequel.", "type": 8 },
+      { "text": "Winded, like I did a one-person play.", "type": 3 },
+      { "text": "Content everything fits together.", "type": 4 },
+      { "text": "Unsure if I wrote it or if it “wrote itself.”", "type": 9 },
+      { "text": "Annoyed nobody gets my big idea but me.", "type": 10 }
+    ]
+  },
+  {
+    "question": "Your worst writing nightmare:",
+    "choices": [
+      { "text": "Your characters go silent.", "type": 9 },
+      { "text": "No detours, outline is law.", "type": 5 },
+      { "text": "No drama allowed, write quietly.", "type": 3 },
+      { "text": "Just go with your gut.", "type": 1 },
+      { "text": "You can’t use that—it’s too close to X.", "type": 2 },
+      { "text": "“Just write what you know, no tricks.”", "type": 7 },
+      { "text": "“Tone it down.”", "type": 6 },
+      { "text": "Accidentally writing something meaningless.", "type": 10 },
+      { "text": "Subplot has no payoff.", "type": 4 },
+      { "text": "Your world makes no sense.", "type": 8 }
+    ]
+  },
+  {
+    "question": "When writing is good, what’s actually happening?",
+    "choices": [
+      { "text": "Stitching together the best bits from everywhere.", "type": 2 },
+      { "text": "Every sentence glows with my message, theme, or Big Question.", "type": 10 },
+      { "text": "The story “arrives,” I just write it down.", "type": 9 },
+      { "text": "Blasting through an outline or prompt.", "type": 1 },
+      { "text": "Pulling off a writing dare or trick.", "type": 7 },
+      { "text": "Wandering, finding stories I never planned.", "type": 5 },
+      { "text": "Totally lost in acting out the scene.", "type": 3 },
+      { "text": "Patterns and echoes everywhere—structure sings.", "type": 4 },
+      { "text": "Everything fits—the world makes sense.", "type": 8 },
+      { "text": "Raw emotion, not caring how it looks.", "type": 6 }
+    ]
+  },
+  {
+    "question": "Your desk is covered in:",
+    "choices": [
+      { "text": "Manifesto drafts.", "type": 10 },
+      { "text": "Water bottles for “acting hydration.”", "type": 3 },
+      { "text": "Worksheets and checklists.", "type": 1 },
+      { "text": "Maps, blueprints, fake coins.", "type": 8 },
+      { "text": "Post-its with echoes and patterns.", "type": 4 },
+      { "text": "Half-filled notebooks.", "type": 9 },
+      { "text": "Other people’s stories.", "type": 2 },
+      { "text": "Timer, dice, challenge cards.", "type": 7 },
+      { "text": "Scribbled emotions on napkins.", "type": 6 },
+      { "text": "Nothing—it’s chaos, I move a lot.", "type": 5 }
+    ]
+  },
+  {
+    "question": "Your favorite part of writing is:",
+    "choices": [
+      { "text": "Table reads alone—method acting!", "type": 3 },
+      { "text": "Frankensteining your favorite tropes and plot twists into something “new.”", "type": 2 },
+      { "text": "Cry at my own prose.", "type": 6 },
+      { "text": "Setting up a reveal nobody saw coming.", "type": 4 },
+      { "text": "Channeling a character until I forget my own name.", "type": 9 },
+      { "text": "Naming twenty minor characters.", "type": 8 },
+      { "text": "Filling in an outline.", "type": 1 },
+      { "text": "Surprising myself with a new story.", "type": 5 },
+      { "text": "Winning a writing dare.", "type": 7 },
+      { "text": "Realizing my story could change someone’s mind.", "type": 10 }
+    ]
+  },
+  {
+    "question": "Which “tip” fills you with existential dread?",
+    "choices": [
+      { "text": "No games, just write.", "type": 7 },
+      { "text": "Worldbuilding is pointless.", "type": 8 },
+      { "text": "If your story doesn’t have a big idea, why bother?", "type": 10 },
+      { "text": "Make it original—no influences.", "type": 2 },
+      { "text": "Stay focused, follow your plan.", "type": 5 },
+      { "text": "Don’t be so dramatic.", "type": 6 },
+      { "text": "Don’t worry about structure.", "type": 4 },
+      { "text": "Don’t listen to your characters, control them.", "type": 9 },
+      { "text": "Don’t use an outline, just flow.", "type": 1 },
+      { "text": "Nobody cares how it sounds.", "type": 3 }
+    ]
+  },
+  {
+    "question": "What do you want most from writing software?",
+    "choices": [
+      { "text": "Templates, fill-in-the-blanks, checklists.", "type": 1 },
+      { "text": "Distraction-free, open sandbox mode.", "type": 5 },
+      { "text": "Automatic remix/trope/idea generator.", "type": 2 },
+      { "text": "Built-in writing dares/challenges.", "type": 7 },
+      { "text": "Worldbuilder spreadsheet, family tree, plot outline.", "type": 8 },
+      { "text": "Mood tracker, playlist builder, vibe diary.", "type": 6 },
+      { "text": "Tools for mapping connections, echoes, themes.", "type": 4 },
+      { "text": "Text-to-speech or built-in “rehearse mode.”", "type": 3 },
+      { "text": "Theme analyzer, message-highlighter.", "type": 10 },
+      { "text": "“Channel mode” or dictation features.", "type": 9 }
+    ]
+  },
+  {
+    "question": "What kind of writing advice do you actually like?",
+    "choices": [
+      { "text": "Write out of order, follow your curiosity.", "type": 5 },
+      { "text": "Here’s a worksheet, now fill it out.", "type": 1 },
+      { "text": "Read your work out loud.", "type": 3 },
+      { "text": "Let the story write itself sometimes.", "type": 9 },
+      { "text": "Change the rules—then break them.", "type": 7 },
+      { "text": "Write like nobody will ever read it.", "type": 6 },
+      { "text": "Ask why, not what.", "type": 10 },
+      { "text": "Plant motifs early, pay them off late.", "type": 4 },
+      { "text": "Steal like an artist.", "type": 2 },
+      { "text": "Build the world before you plot.", "type": 8 }
+    ]
+  },
+  {
+    "question": "Pick a tool.",
+    "choices": [
+      { "text": "Trope-a-matic, detailed template, prompt generator, fill-in-the-blanks structure—just give me a skeleton to work from!", "type": 1 },
+      { "text": "Anything that lets me transcribe the story “as it arrives”—voice memo, notebook, Ouija board.", "type": 9 },
+      { "text": "A voice recorder or a full-length mirror to act out scenes.", "type": 3 },
+      { "text": "Random constraint spinner, challenge jar, or “weird rules” app.", "type": 7 },
+      { "text": "A soapbox, a manifesto, or a whiteboard for my Big Idea.", "type": 10 },
+      { "text": "Worldbuilder spreadsheet, family tree, plot outline with tabs for everything.", "type": 8 },
+      { "text": "Color-coded index cards, structure tracker, mind map.", "type": 4 },
+      { "text": "A secret stash of lines, images, and setups to remix at will.", "type": 2 },
+      { "text": "Playlist, mood journal, and tissues—feeling is the engine.", "type": 6 },
+      { "text": "A blank page—no plan, no map, no pressure.", "type": 5 }
+    ]
+  },
+  {
+    "question": "What makes you rage-quit writing?",
+    "choices": [
+      { "text": "When the voice in my head goes quiet, the characters stop talking, and the page is dead.", "type": 9 },
+      { "text": "A mess of random scenes with no structure, no connections, no payoff.", "type": 4 },
+      { "text": "Being told “don’t steal.” Sorry, I will.", "type": 2 },
+      { "text": "If I have to repeat myself or follow the same routine, I’ll combust.", "type": 7 },
+      { "text": "Boring, flat scenes where nobody moves or cares.", "type": 3 },
+      { "text": "Being forced to outline or stick to a plan when I just want to wander.", "type": 5 },
+      { "text": "People asking me endless questions about plot and character and expecting me to have all the answers instead of giving me something to start with. Please, stop with the questions—I need a scaffold, not an interrogation.", "type": 1 },
+      { "text": "A world that makes no sense—plot holes, lore gaps, or contradictions.", "type": 8 },
+      { "text": "Writing that doesn’t have a point—no message, no soul, just noise.", "type": 10 },
+      { "text": "Being told to dial it down or write something less “emotional.”", "type": 6 }
+    ]
+  },
+  {
+    "question": "When you brainstorm, you:",
+    "choices": [
+      { "text": "Improvise scenes as monologues.", "type": 3 },
+      { "text": "Write down emotional reactions.", "type": 6 },
+      { "text": "Let the ideas wander anywhere.", "type": 5 },
+      { "text": "Invent a constraint (“Only one character can speak!”).", "type": 7 },
+      { "text": "Start by blocking out beats.", "type": 1 },
+      { "text": "Raid pop culture for building blocks.", "type": 2 },
+      { "text": "Diagram everything, connect dots.", "type": 4 },
+      { "text": "Jot down backstory before plot.", "type": 8 },
+      { "text": "Listen for “the voice.”", "type": 9 },
+      { "text": "Argue with yourself about theme.", "type": 10 }
+    ]
+  },
+  {
+    "question": "What’s your “I’m done” moment?",
+    "choices": [
+      { "text": "I broke every rule—on purpose.", "type": 7 },
+      { "text": "I lost my map and still found treasure.", "type": 5 },
+      { "text": "Every beat in the outline is ticked off.", "type": 1 },
+      { "text": "My heart hurts (in a good way).", "type": 6 },
+      { "text": "The message is clear, for once.", "type": 10 },
+      { "text": "Content everything fits together.", "type": 4 },
+      { "text": "My worldbuilding doc is longer than my story.", "type": 8 },
+      { "text": "I can act out every scene in real time.", "type": 3 },
+      { "text": "My characters have “said enough.”", "type": 9 },
+      { "text": "I’ve remixed every trope in the toolbox.", "type": 2 }
+    ]
+  },
+  {
+    "question": "What scares you most about writing in public?",
+    "choices": [
+      { "text": "People critiquing my structure.", "type": 1 },
+      { "text": "Being told to “tone it down.”", "type": 6 },
+      { "text": "Getting stuck and looking lost.", "type": 5 },
+      { "text": "Being called unoriginal.", "type": 2 },
+      { "text": "No one noticing the clever patterns.", "type": 4 },
+      { "text": "Getting world details wrong.", "type": 8 },
+      { "text": "Going blank in front of others.", "type": 9 },
+      { "text": "Not meeting the challenge.", "type": 7 },
+      { "text": "Nobody gets the point.", "type": 10 },
+      { "text": "Being told to “just write normal.”", "type": 3 }
+    ]
+  },
+  {
+    "question": "Your approach to feedback?",
+    "choices": [
+      { "text": "If it doesn’t hurt, it doesn’t help.", "type": 6 },
+      { "text": "Did my characters sound real?", "type": 9 },
+      { "text": "Point out where the structure breaks.", "type": 1 },
+      { "text": "Let’s fix the lore holes first.", "type": 8 },
+      { "text": "Can I act out my revision notes for you?", "type": 3 },
+      { "text": "If someone else fixed it better, I’ll steal their fix.", "type": 2 },
+      { "text": "Did you get the message, or nah?", "type": 10 },
+      { "text": "What patterns or clues did you notice?", "type": 4 },
+      { "text": "Give me a new rule to play with.", "type": 7 },
+      { "text": "If it’s predictable, I’ll toss it.", "type": 5 }
+    ]
+  },
+  {
+    "question": "What do you want the most from writing software?",
+    "choices": [
+      { "text": "Mood journal, playlist builder, vibe diary.", "type": 6 },
+      { "text": "Constraint spinner, challenge jar.", "type": 7 },
+      { "text": "Channel mode or dictation features.", "type": 9 },
+      { "text": "Outline generator, structure builder.", "type": 1 },
+      { "text": "Trope remixer, idea generator.", "type": 2 },
+      { "text": "Sandbox/distraction-free space.", "type": 5 },
+      { "text": "World and character lore manager.", "type": 8 },
+      { "text": "Theme analyzer or message-highlighter.", "type": 10 },
+      { "text": "Text-to-speech and scene rehearsal.", "type": 3 },
+      { "text": "Pattern/connection tracker.", "type": 4 }
+    ]
+  },
+  {
+    "question": "In group writing games, you:",
+    "choices": [
+      { "text": "Keep score of who invented what in the world.", "type": 8 },
+      { "text": "Voice the dialogue for all the characters.", "type": 3 },
+      { "text": "Write down everything, even off-script.", "type": 9 },
+      { "text": "Spot all the story parallels before anyone else.", "type": 4 },
+      { "text": "Remix everyone’s ideas shamelessly.", "type": 2 },
+      { "text": "Volunteer to be the scribe or planner.", "type": 1 },
+      { "text": "Make everything “go deep” and “get real.”", "type": 6 },
+      { "text": "Add a new rule and make people stick to it.", "type": 7 },
+      { "text": "Pick the weirdest prompt and run with it.", "type": 5 },
+      { "text": "Force the group to pick a theme.", "type": 10 }
+    ]
+  },
+  {
+    "question": "What would you banish from every writing group, forever?",
+    "choices": [
+      { "text": "You need motifs and echoes.", "type": 4 },
+      { "text": "No games, just write normal.", "type": 7 },
+      { "text": "Let’s start with a blank page!", "type": 1 },
+      { "text": "Don’t listen to your characters.", "type": 9 },
+      { "text": "Worldbuilding is a waste.", "type": 8 },
+      { "text": "What’s your message?", "type": 10 },
+      { "text": "Structure matters more than feelings.", "type": 6 },
+      { "text": "That’s plagiarism.", "type": 2 },
+      { "text": "Stick to your outline.", "type": 5 },
+      { "text": "Just act it out, you’ll feel it!", "type": 3 }
+    ]
+  },
+  {
+    "question": "When you finish a draft, how do you feel?",
+    "choices": [
+      { "text": "Already thinking about the lore for the sequel.", "type": 8 },
+      { "text": "Ready for the next challenge, even if this one killed me.", "type": 7 },
+      { "text": "Emotionally hungover.", "type": 6 },
+      { "text": "Annoyed that nobody will appreciate the Big Idea but me.", "type": 10 },
+      { "text": "Did I really write this, or did someone else possess me?", "type": 9 },
+      { "text": "Slightly surprised I finished, but I’ll just start something else.", "type": 5 },
+      { "text": "Excited to see what I “borrowed” that nobody will notice.", "type": 2 },
+      { "text": "Weirdly winded, like I just ran a marathon in accents.", "type": 3 },
+      { "text": "Proud of my color-coded outline and word count.", "type": 1 },
+      { "text": "Satisfied that everything loops back and fits together.", "type": 4 }
+    ]
+  },
+  {
+    "question": "What’s your writing “flex”?",
+    "choices": [
+      { "text": "Sneaking philosophy into every scene.", "type": 10 },
+      { "text": "Building a world deeper than the main story.", "type": 8 },
+      { "text": "Jumping in, improvising on the fly.", "type": 5 },
+      { "text": "Writing what others won’t say.", "type": 6 },
+      { "text": "Selling the dialogue with a read.", "type": 3 },
+      { "text": "Outlining for others, live.", "type": 1 },
+      { "text": "Adapting any idea, anywhere.", "type": 2 },
+      { "text": "Writing from character “possession.”", "type": 9 },
+      { "text": "Finding the underlying structure of any plot.", "type": 4 },
+      { "text": "Out-weirding the group, every time.", "type": 7 }
+    ]
+  },
+  {
+    "question": "What’s the best thing Ray Ray could say to encourage you?",
+    "choices": [
+      { "text": "Your world feels real.", "type": 8 },
+      { "text": "That line hit hard.", "type": 6 },
+      { "text": "I never saw that coming.", "type": 5 },
+      { "text": "This could change someone’s mind.", "type": 10 },
+      { "text": "You broke the rules in the best way.", "type": 7 },
+      { "text": "Every scene connects.", "type": 4 },
+      { "text": "You nailed the structure.", "type": 1 },
+      { "text": "That’s a genius twist.", "type": 2 },
+      { "text": "Your characters sound real.", "type": 3 },
+      { "text": "This is pure voice.", "type": 9 }
+    ]
+  },
+  {
+    "question": "What’s your happy place as a writer?",
+    "choices": [
+      { "text": "Everything is up for grabs; I collect, swipe, and remix the best bits from everywhere.", "type": 2 },
+      { "text": "Writing with a mission or message.", "type": 10 },
+      { "text": "A fill-in-the-blanks outline or template.", "type": 1 },
+      { "text": "Building worlds, lore, and spreadsheets.", "type": 8 },
+      { "text": "Acting it out, voices and all.", "type": 3 },
+      { "text": "Bleeding feelings on the page.", "type": 6 },
+      { "text": "Channeling whatever comes to mind.", "type": 9 },
+      { "text": "Spotting connections and patterns.", "type": 4 },
+      { "text": "Wandering without a plan.", "type": 5 },
+      { "text": "Weird writing challenges.", "type": 7 }
+    ]
+  },
+  {
+    "question": "Think of your best writing moment—what are you proud of?",
+    "choices": [
+      { "text": "Remixing a trope so well nobody noticed.", "type": 2 },
+      { "text": "Discovering a plot twist in the middle of writing.", "type": 5 },
+      { "text": "Getting across a big idea, loud and clear.", "type": 10 },
+      { "text": "Pulling off a perfect outline.", "type": 1 },
+      { "text": "Moving someone to tears.", "type": 6 },
+      { "text": "Nailing the dialogue and scene energy.", "type": 3 },
+      { "text": "Letting a story “write itself.”", "type": 9 },
+      { "text": "Setting up a reveal nobody saw coming.", "type": 4 },
+      { "text": "Inventing a language or lore detail that stuck.", "type": 8 },
+      { "text": "Finishing a writing dare.", "type": 7 }
+    ]
+  },
+  {
+    "question": "If you could automate ONE thing in writing, what would it be?",
+    "choices": [
+      { "text": "Tropes and remix ideas.", "type": 2 },
+      { "text": "Suggesting themes and meanings.", "type": 10 },
+      { "text": "Outlining.", "type": 1 },
+      { "text": "Mood and emotion tracking.", "type": 6 },
+      { "text": "Generating lore and names.", "type": 8 },
+      { "text": "Casting characters with voices.", "type": 3 },
+      { "text": "Finding and highlighting motifs.", "type": 4 },
+      { "text": "Auto-transcribing my thoughts.", "type": 9 },
+      { "text": "Discovery writing, so I can jump around.", "type": 5 },
+      { "text": "Dares and rules—surprise me.", "type": 7 }
+    ]
+  },
+  {
+    "question": "If someone reads your work, what’s the one compliment that means the most?",
+    "choices": [
+      { "text": "I saw the clues—brilliant.", "type": 4 },
+      { "text": "The voices/dialogue felt real.", "type": 3 },
+      { "text": "I’ve never seen a story do that before.", "type": 7 },
+      { "text": "Your world felt alive.", "type": 8 },
+      { "text": "That was so well-structured.", "type": 1 },
+      { "text": "That story went places I never imagined.", "type": 5 },
+      { "text": "Those characters could have walked off the page.", "type": 9 },
+      { "text": "You twisted a trope in a way I never expected.", "type": 2 },
+      { "text": "You made me feel something real.", "type": 6 },
+      { "text": "I’m still thinking about the meaning.", "type": 10 }
+    ]
+  }
+]
 
-Everything is up for grabs; I collect, swipe, and remix the best bits from everywhere.
-
-I need to feel the scene in my body—acting it out, using my voice, or just letting the drama run wild.
-
-If it’s not connected—theme, symbol, echoes—I lose interest. I crave structure, patterns, secret puzzles.
-
-Freedom to explore and get lost; plans and outlines kill the fun.
-
-If it bleeds, it leads—I want to write what I feel, ugly or beautiful.
-
-My tool is a wild new challenge or rule—give me constraints, or I get bored fast.
-
-I need to know the world’s lore, every character’s backstory, and have a spreadsheet for the plot.
-
-I’m just catching whatever the characters or story want to say, like a radio tuned to their frequency.
-
-I want my writing to mean something—a big idea, a worldview, a cause to shout about.
-
-2. What makes you rage-quit writing?
-Boring, flat scenes where nobody moves or cares.
-
-A world that makes no sense—plot holes, lore gaps, or contradictions.
-
-People asking me endless questions about plot and character and expecting me to have all the answers instead of giving me something to start with. Please, stop with the questions—I need a scaffold, not an interrogation.
-
-Writing that doesn’t have a point—no message, no soul, just noise.
-
-Being told “don’t steal.” Sorry, I will.
-
-If I have to repeat myself or follow the same routine, I’ll combust.
-
-A mess of random scenes with no structure, no connections, no payoff.
-
-Being forced to outline or stick to a plan when I just want to wander.
-
-Being told to dial it down or write something less “emotional.”
-
-When the voice in my head goes quiet, the characters stop talking, and the page is dead.
-
-3. How do you get unstuck?
-Give myself a challenge: “Write backwards, only questions, 100 words max—go!”
-
-Ask the story or characters what’s next and wait until they tell me.
-
-Jump to a wild new scene, a strange direction, or another story altogether.
-
-Draw diagrams, use sticky notes, color-code for echoes and motifs.
-
-Swipe an idea from a movie, book, or stranger on the train—then twist it.
-
-Consult my plot spreadsheet, lore docs, or backstory bible until it clicks.
-
-Act out the scene, voice the dialogue, move until it’s real.
-
-Spin the trope wheel, fill in a prompt, or use an outline to give me a starting place—never blank, never endless questions.
-
-Ask myself what I’m really trying to say and make it bigger, louder, or clearer.
-
-Dump my feelings into a poem, journal, or messy monologue and sort it out later.
-
-4. Pick a tool.
-Anything that lets me transcribe the story “as it arrives”—voice memo, notebook, Ouija board.
-
-Playlist, mood journal, and tissues—feeling is the engine.
-
-A secret stash of lines, images, and setups to remix at will.
-
-A soapbox, a manifesto, or a whiteboard for my Big Idea.
-
-Random constraint spinner, challenge jar, or “weird rules” app.
-
-A voice recorder or a full-length mirror to act out scenes.
-
-A blank page—no plan, no map, no pressure.
-
-Color-coded index cards, structure tracker, mind map.
-
-Trope-a-matic, detailed template, prompt generator, fill-in-the-blanks structure—just give me a skeleton to work from!
-
-Worldbuilder spreadsheet, family tree, plot outline with tabs for everything.
-
-5. When writing is good, what’s actually happening?
-Every piece fits—the world makes sense, the plot is tight, nothing is random.
-
-Patterns are firing, structure is singing, every scene is an echo or a twist.
-
-I’m racing through a detailed outline, prompt, or trope and turning it into something new—I never start from nothing.
-
-I’m assembling a Frankenstein’s monster out of the best bits from everywhere.
-
-I lose myself in the scene—voice, movement, feeling alive.
-
-I’m swimming in raw feeling and don’t care how it looks yet.
-
-I’m wandering, taking risks, stumbling onto treasure I never planned for.
-
-Pulling off a writing dare or trick, showing off what weird rules can do.
-
-Capturing the story as it “arrives”—it doesn’t feel like work, it feels like listening.
-
-Every sentence glows with my message, theme, or Big Question.
 

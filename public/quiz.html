@@ -7,133 +7,58 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap">
 <style>
   body {
-    background:#111;
-    color:#f4f4f4;
-    font-family:'Space Grotesk', sans-serif;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:2rem;
+    background: #111;
+    color: #f4f4f4;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
   }
-  h1 {margin-bottom:1.5rem;}
-  .container {display:flex; align-items:flex-start; gap:2rem; max-width:1200px;}
-  .quiz-area {flex:1;}
-  .info-text {flex:1; max-width:500px; line-height:1.4;}
-  .question {margin-bottom:1.5rem; max-width:700px;}
-  .answers {display:flex; flex-direction:column; gap:0.5rem; margin-top:0.5rem;}
-  label {cursor:pointer;}
-  button {margin-top:1.5rem; padding:0.75rem 1.5rem; font-size:1rem; font-weight:bold; border:none; border-radius:8px; cursor:pointer; background:#f4f4f4; color:#111;}
-  #result {margin-top:2rem; text-align:center;}
-  #result h2 {margin-bottom:0.5rem;}
-  .hidden {display:none;}
+  h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #f4f4f4;
+  }
+  .intro {
+    max-width: 700px;
+    margin-bottom: 2.5rem;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #f4f4f4;
+    text-align: center;
+  }
+  #quiz-container h3 {
+    color: #e53935;
+  }
+  #quiz-container, #quiz-questions, #quiz-result, #quiz-container p, #quiz-container label, #quiz-container button {
+    color: #f4f4f4;
+  }
 </style>
 </head>
 <body>
-<h1>Find Your Writer Type</h1>
-<div class="container">
-  <div class="quiz-area">
-    <div id="quiz"></div>
-    <button id="submitBtn">Submit</button>
-    <div id="result" class="hidden"></div>
+  <h1>Find Your Writer Type</h1>
+  <div class="intro">
+    <p>No, I don’t think you’re a type. I’m not gonna go all Jungian archetype on you.<br>
+    It's just that no one writes the same or learns the same. And if you're gonna learn, you gotta learn in your own language, in your own way. So I came up with some writer types, and made a quiz out of it. If you take it, it will give you a profile and then it will tell Ray Ray about it, and when he talks to you, he'll do his best to frame it in the style you work in the best. It's all just one big creative writing exercise, and it only works if you play along.</p>
   </div>
-  <div class="info-text">
-    <p>“All models are right, most are useless.” —Andrew Gelman</p>
-    <p>No, I don’t think you’re a type. I’m not gonna go all Jungian archetype on you.
-But let’s be real: no one writing method works for everyone.</p>
-    <p>This game tries its best to meet you where you are. It’s one big creative writing exercise—and it only works if you play along.</p>
-    <p>I made a game to learn the literary devices I was never taught.</p>
-    <p>Here’s what happened: I read a lot as a kid. Decided I wanted to be a writer. Bought all the how-to-write books. And none of them made any damn sense to me.</p>
-    <p>They all assumed I already knew something I didn’t: the actual parts of writing.</p>
-    <p>Most had what I call the Star Wars disease. George Lucas talked about Joseph Campbell, and suddenly every writing book said “just follow the three-act structure and boom—and you will start bleeding money out of your eyeballs. #1 best seller- i promise.”</p>
-    <p>But they never explained what goes into those acts. They assumed you already knew how to use literary devices. I didn’t. So I felt stupid. Not creative enough. Not talented enough. i thought being a good writer meant i was already supposed to know all that.</p>
-    <p>So i bought every book on the market and studied them. but they have a big problem- you cant talk to them and ask questions. and what if they write it for the type of writer you’re not? then you just wasted your time.</p>
-    <p>So I built a game. It’s called Writer Lab.<br>Here’s what it does:</p>
-    <ul>
-      <li>Teaches fiction writing one literary device at a time</li>
-      <li>Each one has its own writing challenge</li>
-      <li>The prompts are structured and specific (no vague "just write!" stuff)</li>
-      <li>You get tested on the element after learning it—so you actually know if it clicked</li>
-      <li>There’s a simple built-in AI named RayRay who answers your questions if you get stuck<br>(He's slow and forgets everything between chats, but he's trying his best)</li>
-    </ul>
-    <p>The big idea?<br>I started thinking of literary devices like elements on a periodic table—and stories like experiments.
-It takes the pressure off.</p>
-    <p>Still building it. But it’s real. take the quiz and let the game explain writing to you in you're own writing style.</p>
-  </div>
-</div>
-<script>
-async function loadText(url){
-  const resp=await fetch(url);
-  return resp.text();
-}
-function parseQuestions(text){
-  const lines=text.split(/\r?\n/);
-  const questions=[]; let current=null;
-  lines.forEach(line=>{
-    const q=line.match(/^(\d+)\.\s*(.+)/);
-    if(q){ if(current) questions.push(current); current={question:q[2], answers:[]}; }
-    else if(line.trim()!=='' && current){ current.answers.push(line.trim()); }
-  });
-  if(current) questions.push(current);
-  return questions;
-}
-function parseKey(text){
-  const map={};
-  text.split(/\r?\n/).forEach(l=>{const m=l.match(/^(\d+)\s+(.+)/); if(m) map[m[1]]=m[2].trim();});
-  return map;
-}
-(async function(){
-  const [qText,keyText]=await Promise.all([
-    loadText('/quiz_data/quiz_questions'),
-    loadText('/quiz_data/quiz_answer_key')
-  ]);
-  const questions=parseQuestions(qText);
-  const answerKey=parseKey(keyText);
-  const quizDiv=document.getElementById('quiz');
-  questions.forEach((q,i)=>{
-    const qDiv=document.createElement('div'); qDiv.className='question';
-    const qTitle=document.createElement('h3'); qTitle.textContent=q.question; qDiv.appendChild(qTitle);
-    const ansDiv=document.createElement('div'); ansDiv.className='answers';
-    q.answers.forEach((a,idx)=>{
-      const id=`q${i}_a${idx}`;
-      const label=document.createElement('label');
-      const input=document.createElement('input');
-      input.type='radio'; input.name=`q${i}`; input.value=idx+1; input.id=id;
-      label.appendChild(input); label.append(' '+a);
-      ansDiv.appendChild(label);
+  <script src="/quiz-embed.js"></script>
+  <script type="module">
+    import RayRayChatbot from '/drafting-room/RayRayChatbot.js';
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!document.getElementById('rayray-chatbot')) {
+        const div = document.createElement('div');
+        div.id = 'rayray-chatbot';
+        document.body.appendChild(div);
+        // Mount RayRayChatbot if using React, or insert HTML if vanilla
+        // For vanilla, you may need to use a custom widget or iframe
+      }
     });
-    qDiv.appendChild(ansDiv); quizDiv.appendChild(qDiv);
-  });
-  document.getElementById('submitBtn').onclick=()=>{
-    const selections=[...document.querySelectorAll('input[type=radio]:checked')];
-    if(selections.length!==questions.length){alert('Please answer all questions.');return;}
-    const counts={};
-    selections.forEach(s=>{counts[s.value]=(counts[s.value]||0)+1;});
-    const max=Math.max(...Object.values(counts));
-    const winners=Object.keys(counts).filter(k=>counts[k]===max);
-    const resultDiv=document.getElementById('result');
-    resultDiv.innerHTML='';
-    if(winners.length>1){
-      resultDiv.classList.remove('hidden');
-      const p=document.createElement('p');
-      p.textContent='Tie! Choose your writer type:';
-      resultDiv.appendChild(p);
-      winners.forEach(num=>{
-        const type=answerKey[num];
-        const btn=document.createElement('button');
-        btn.textContent=type; btn.onclick=()=>showResult(type);
-        resultDiv.appendChild(btn);
-      });
-    } else {
-      showResult(answerKey[winners[0]]);
-    }
-    function showResult(type){
-      const slug=type.split(/[\s/]/)[0].toLowerCase();
-      // Save writer type to localStorage for Ray Ray personalization
-      localStorage.setItem('writerType', slug);
-      window.location.href=`/profile/${slug}`;
-    }
-  };
-})();
-</script>
+  </script>
+</body>
+</html>
 </body>
 </html>

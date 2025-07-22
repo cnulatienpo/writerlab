@@ -18,15 +18,13 @@ function createQuiz() {
 
 async function loadQuiz() {
   try {
-    const [qText, keyText] = await Promise.all([
-      fetch('/quiz_data/quiz_questions').then(r => r.text()),
-      fetch('/quiz_data/quiz_answer_key').then(r => r.text())
+    const [questionsJson, typeMapJson, typeDescJson] = await Promise.all([
+      fetch('/quiz_data/quiz_questions').then(r => r.json()),
+      fetch('/quiz_data/writer_type_map.json').then(r => r.json()),
+      fetch('/quiz_data/writer_type_descriptions.json').then(r => r.json())
     ]);
-    
-    const questions = parseQuestions(qText);
-    const answerKey = parseAnswerKey(keyText);
-    
-    displayQuiz(questions, answerKey);
+
+    displayQuiz(questionsJson, typeMapJson, typeDescJson);
   } catch (error) {
     console.error('Error loading quiz:', error);
     document.getElementById('quiz-questions').innerHTML = '<p>Error loading quiz. Please try again later.</p>';
@@ -72,82 +70,87 @@ function displayQuiz(questions, answerKey) {
     questionDiv.style.padding = '1rem';
     questionDiv.style.border = '1px solid #333';
     questionDiv.style.borderRadius = '8px';
-    
+
     const questionTitle = document.createElement('h3');
     questionTitle.textContent = q.question;
     questionTitle.style.marginBottom = '0.5rem';
     questionDiv.appendChild(questionTitle);
-    
+
     const answersDiv = document.createElement('div');
     answersDiv.style.display = 'flex';
     answersDiv.style.flexDirection = 'column';
     answersDiv.style.gap = '0.5rem';
-    
-    q.answers.forEach((answer, idx) => {
+
+    // Randomize choices
+    const shuffled = q.choices.slice().sort(() => Math.random() - 0.5);
+    shuffled.forEach((answer, idx) => {
       const label = document.createElement('label');
       label.style.cursor = 'pointer';
       label.style.padding = '0.5rem';
       label.style.borderRadius = '4px';
       label.style.transition = 'background-color 0.2s';
-      
+
       const input = document.createElement('input');
       input.type = 'radio';
       input.name = `q${i}`;
-      input.value = idx + 1;
+      input.value = answer.type;
       input.style.marginRight = '0.5rem';
-      
+
       label.appendChild(input);
-      label.appendChild(document.createTextNode(answer));
-      
+      label.appendChild(document.createTextNode(answer.text));
+
       label.addEventListener('mouseenter', () => {
         label.style.backgroundColor = '#222';
       });
-      
+
       label.addEventListener('mouseleave', () => {
         label.style.backgroundColor = 'transparent';
       });
-      
+
       answersDiv.appendChild(label);
     });
-    
+
     questionDiv.appendChild(answersDiv);
     questionsDiv.appendChild(questionDiv);
   });
-  
+
   document.getElementById('quiz-submit').style.display = 'block';
-  document.getElementById('quiz-submit').onclick = () => submitQuiz(questions, answerKey);
+  document.getElementById('quiz-submit').onclick = () => submitQuiz(questions.length);
 }
 
-function submitQuiz(questions, answerKey) {
+let typeMap = null;
+let typeDesc = null;
+
+function submitQuiz(numQuestions) {
   const selections = [...document.querySelectorAll('input[type=radio]:checked')];
-  
-  if (selections.length !== questions.length) {
+
+  if (selections.length !== numQuestions) {
     alert('Please answer all questions before submitting.');
     return;
   }
-  
+
   const counts = {};
   selections.forEach(selection => {
     const value = selection.value;
     counts[value] = (counts[value] || 0) + 1;
   });
-  
+
   const maxCount = Math.max(...Object.values(counts));
   const winners = Object.keys(counts).filter(key => counts[key] === maxCount);
-  
+
   const resultDiv = document.getElementById('quiz-result');
   resultDiv.innerHTML = '';
   resultDiv.style.display = 'block';
-  
+
   if (winners.length > 1) {
     const p = document.createElement('p');
     p.textContent = 'You have a tie! Choose your preferred writer type:';
     resultDiv.appendChild(p);
-    
+
     winners.forEach(num => {
-      const type = answerKey[num];
+      const typeName = typeMap[num];
       const button = document.createElement('button');
-      button.textContent = type;
+      button.textContent = typeName;
       button.style.margin = '0.5rem';
       button.style.padding = '0.5rem 1rem';
       button.style.border = 'none';
@@ -155,22 +158,24 @@ function submitQuiz(questions, answerKey) {
       button.style.cursor = 'pointer';
       button.style.backgroundColor = '#333';
       button.style.color = '#f4f4f4';
-      button.onclick = () => showResult(type);
+      button.onclick = () => showResult(num);
       resultDiv.appendChild(button);
     });
   } else {
-    showResult(answerKey[winners[0]]);
+    showResult(winners[0]);
   }
 }
 
-function showResult(type) {
-  const slug = type.split(/[\s/]/)[0].toLowerCase();
+function showResult(typeNum) {
+  const typeName = typeMap[typeNum];
+  const description = typeDesc[typeNum] || '';
+  const slug = typeName.split(/[/\s]/)[0].toLowerCase();
   localStorage.setItem('writerType', slug);
-  
+
   const resultDiv = document.getElementById('quiz-result');
   resultDiv.innerHTML = `
-    <h3>Your Writer Type: ${type}</h3>
-    <p>Based on your responses, you're a ${type}!</p>
+    <h3>Your Writer Type: ${typeName}</h3>
+    <p>${description}</p>
     <div style="margin-top: 1rem;">
       <button onclick="location.href='/profile/${slug}'" style="margin-right: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; background: #f4f4f4; color: #111;">
         View Full Profile
@@ -182,5 +187,34 @@ function showResult(type) {
   `;
 }
 
-// Initialize quiz when page loads
+// Store typeMap and typeDesc globally for result lookup
+async function createQuiz() {
+  const quizHtml = `
+    <div id="quiz-container" style="margin-top: 3rem; padding: 2rem; border-top: 2px solid #333;">
+      <h2 style="margin-bottom: 1.5rem; color: #f4f4f4;">Test Your Writer Type</h2>
+      <p style="margin-bottom: 1rem; line-height: 1.4;">Think this might be your type? Take our quick quiz to find out!</p>
+      <div id="quiz-questions"></div>
+      <button id="quiz-submit" style="margin-top: 1.5rem; padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; background: #f4f4f4; color: #111; display: none;">Submit Quiz</button>
+      <div id="quiz-result" style="margin-top: 1.5rem; display: none;"></div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', quizHtml);
+
+  // Load and display quiz
+  try {
+    const [questionsJson, typeMapJson, typeDescJson] = await Promise.all([
+      fetch('/quiz_data/quiz_questions').then(r => r.json()),
+      fetch('/quiz_data/writer_type_map.json').then(r => r.json()),
+      fetch('/quiz_data/writer_type_descriptions.json').then(r => r.json())
+    ]);
+    typeMap = typeMapJson;
+    typeDesc = typeDescJson;
+    displayQuiz(questionsJson, typeMapJson, typeDescJson);
+  } catch (error) {
+    console.error('Error loading quiz:', error);
+    document.getElementById('quiz-questions').innerHTML = '<p>Error loading quiz. Please try again later.</p>';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', createQuiz);

@@ -89,70 +89,25 @@
 </head>
 <body>
     <div class="status">✅ Page Loaded Successfully!</div>
-    
+
+    <button id="toggle-drawer" style="position:fixed;top:20px;left:20px;z-index:1100;padding:0.7rem 1.2rem;font-size:1.1rem;border-radius:8px;border:none;background:#e53935;color:#fff;box-shadow:0 2px 8px #0003;cursor:pointer;">📝 Scene Notes</button>
+    <aside id="slideout-drawer">
+      <h3>� Scene Note</h3>
+      <div class="slide-note-section" id="note-summary">
+        <!-- Auto-filled from JSON -->
+        This is the scene where [summary]. Remember to [reminder].
+      </div>
+      <div class="slide-note-section" id="note-characters">
+        Characters: Noodles, Father Godin, Little Girl
+      </div>
+      <div class="slide-note-section" id="note-prompt">
+        ❓ Prompt: Pretend you're the villain. What happens here?
+      </div>
+    </aside>
+
     <div class="container">
         <h1>📘 Drafting Room - Working Test</h1>
-        
-        <!-- Project Dashboard -->
-        <div id="project-dashboard" class="section">
-            <h2>Your Projects</h2>
-            <div id="project-list"></div>
-            <input type="text" id="new-project-name" placeholder="Enter new project name..." />
-            <button onclick="createProject()">Create Project</button>
-        </div>
-        
-        <!-- Story Check -->
-        <div id="story-check" class="section hidden">
-            <h2>📝 Story Check</h2>
-            <textarea id="story-check-input" placeholder="Write your story premise, genre, tone, and key questions..."></textarea>
-            <button onclick="saveStoryCheck()">Save Story Check</button>
-            
-            <div class="nav-buttons">
-                <strong>Navigate to:</strong><br>
-                <button onclick="showSection('outline')">📂 Outline</button>
-                <button onclick="showSection('settings')">🏛️ Settings</button>
-                <button onclick="showSection('characters')">👥 Characters</button>
-            </div>
-        </div>
-        
-        <!-- Outline -->
-        <div id="outline" class="section hidden">
-            <h2>📂 Story Outline</h2>
-            <div id="outline-content">
-                <p>No scenes yet. Click "Add Scene" to start building your story.</p>
-            </div>
-            <button onclick="addScene()">Add Scene</button>
-            <button onclick="showSection('story-check')">← Back to Story Check</button>
-        </div>
-        
-        <!-- Settings -->
-        <div id="settings" class="section hidden">
-            <h2>🏛️ Settings & World Building</h2>
-            <div id="settings-content">
-                <p>No settings created yet. Click "Add Setting" to create your first setting.</p>
-            </div>
-            <button onclick="addSetting()">Add Setting</button>
-            <button onclick="showSection('story-check')">← Back to Story Check</button>
-        </div>
-        
-        <!-- Characters -->
-        <div id="characters" class="section hidden">
-            <h2>👥 Characters</h2>
-            <div id="characters-content">
-                <p>No characters created yet. Click "Add Character" to create your first character.</p>
-            </div>
-            <button onclick="addCharacter()">Add Character</button>
-            <button onclick="showSection('story-check')">← Back to Story Check</button>
-        </div>
-        
-        <!-- Status Display -->
-        <div id="debug-info" style="background: #e9ecef; padding: 15px; border-radius: 5px; margin-top: 20px;">
-            <h3>Debug Information</h3>
-            <p>Current project: <span id="current-project-name">None</span></p>
-            <p>Settings count: <span id="settings-count">0</span></p>
-            <p>Characters count: <span id="characters-count">0</span></p>
-            <p>Last action: <span id="last-action">Page loaded</span></p>
-        </div>
+        <!-- ...existing code... -->
     </div>
 
     <script>
