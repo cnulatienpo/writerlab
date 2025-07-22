@@ -1,3 +1,13 @@
+// Slideout drawer toggle logic
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleDrawerBtn = document.getElementById('toggle-drawer');
+  const slideoutDrawer = document.getElementById('slideout-drawer');
+  if (toggleDrawerBtn && slideoutDrawer) {
+    toggleDrawerBtn.addEventListener('click', () => {
+      slideoutDrawer.classList.toggle('visible');
+    });
+  }
+});
 // Moved from drafting room/main.js
 // ...existing code...
 

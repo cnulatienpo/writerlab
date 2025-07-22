@@ -127,7 +127,7 @@ export default function Home() {
           >
             <strong>Literary Deviousness</strong>
             <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
-              Explore the full set of literary devices, narration, and writing tools.
+              The building blocks of writing
             </div>
           </a>
         </div>
