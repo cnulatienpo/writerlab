@@ -226,6 +226,21 @@ export default function DeviousnessPage() {
           </div>
         </section>
 
+        {/* 14. Narration Parts */}
+        <section style={{ marginTop: '3rem' }}>
+          <h2 style={{ marginBottom: '1rem' }}>14. Narration Parts</h2>
+          <div className="grid">
+            {Array.from({ length: 10 }, (_, i) => (
+              <Link
+                key={i + 1}
+                href={`/definitions/${encodeURIComponent('Narration Part ' + (i + 1))}`}
+                className="tile"
+              >
+                Narration Part {i + 1}
+              </Link>
+            ))}
+          </div>
+        </section>
       </main>
     </>
   );

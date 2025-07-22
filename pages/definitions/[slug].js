@@ -3,6 +3,8 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import dynamic from 'next/dynamic';
+const RayRayChatbot = dynamic(() => import('../../public/drafting-room/RayRayChatbot'), { ssr: false });
 
 export async function getStaticPaths() {
   const files = fs.readdirSync(path.join(process.cwd(), 'definitions'));
@@ -33,9 +35,10 @@ export async function getStaticProps({ params }) {
 
 export default function DefinitionPage({ title, contentHtml }) {
   return (
-    <main style={{ padding: '2rem', color: '#f4f4f4', background: '#111', minHeight: '100vh' }}>
+    <main style={{ padding: '2rem', color: '#f4f4f4', background: '#111', minHeight: '100vh', position: 'relative' }}>
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+      <RayRayChatbot />
     </main>
   );
 }
