@@ -1,5 +1,3 @@
-// Moved from drafting room/All-in-One Local Data Analysis Script
-
 // --- STOPWORDS for motif tracker ---
 const STOPWORDS = [
   "the","and","a","to","of","in","that","is","for","on","it","as","with","was","but","be","at","by",
@@ -7,6 +5,7 @@ const STOPWORDS = [
   "have","has","we","my","so","me","their","if","no","he"
 ];
 
+// --- Textual Telemetry ---
 function getAverageSentenceLength(text) {
   const sentences = text.match(/[^\.\!?]+[\.\!?]+/g) || [];
   if (sentences.length === 0) return 0;
@@ -65,6 +64,7 @@ function getPassiveVoicePercentage(text) {
   return +(100 * passive / sentences.length).toFixed(1);
 }
 
+// --- Motif/Theme Tracker (basic word frequency map) ---
 function getMotifMap(text) {
   const words = text
     .toLowerCase()
@@ -73,14 +73,17 @@ function getMotifMap(text) {
     .filter(w => w.length > 2 && !STOPWORDS.includes(w));
   const freq = {};
   for (let w of words) freq[w] = (freq[w] || 0) + 1;
+  // Get top 5 motifs
   return Object.entries(freq)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
     .map(([word, count]) => ({ word, count }));
 }
 
+// --- Emotion/Conceptual Heatmap (simple) ---
 const EMOTION_WORDS = ["fear","anger","love","joy","sad","hate","hope","envy","pain","shame","trust"];
 function getEmotionHeatmap(text) {
+  // Count each emotion word in the scene
   const result = {};
   for (let emotion of EMOTION_WORDS) {
     const regex = new RegExp(`\\b${emotion}\\w*\\b`, 'gi');
@@ -89,22 +92,26 @@ function getEmotionHeatmap(text) {
   return result;
 }
 
+// --- Character Tracker (basic: capitalized words not at start of sentence) ---
 function getCharacterMap(text) {
   const names = {};
   const lines = text.split('\n');
   for (let line of lines) {
+    // Find capitalized words that aren't first word in the line
     const words = line.split(/\s+/);
     for (let i = 1; i < words.length; i++) {
       const w = words[i];
       if (/^[A-Z][a-z]+$/.test(w)) names[w] = (names[w] || 0) + 1;
     }
   }
+  // Top 5 likely character names
   return Object.entries(names)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
     .map(([name, count]) => ({ name, count }));
 }
 
+// --- Main Data Analysis Function ---
 export function runAllDataAnalysis(text) {
   return {
     telemetry: {
@@ -120,5 +127,6 @@ export function runAllDataAnalysis(text) {
     motifMap: getMotifMap(text),
     emotionHeatmap: getEmotionHeatmap(text),
     characterMap: getCharacterMap(text)
+    // Add more models here later if you want!
   };
 }

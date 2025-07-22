@@ -24,6 +24,24 @@ async function testSheetDB() {
     console.error("Error saving to sheet:", err.message);
   }
 }
+// Export for modules
+export { saveScene };
+// Attach to window for global access
+if (typeof window !== 'undefined') {
+  window.saveScene = saveScene;
+}
+
+// Fallback: If not using project/scene index, provide a localStorage-based saveScene
+if (typeof window !== 'undefined' && typeof window.saveScene !== 'function') {
+  window.saveScene = function(sceneId, sceneObj) {
+    const project = JSON.parse(localStorage.getItem('writingProject'));
+    const sceneIndex = project.scenes.findIndex(s => s.id === sceneId);
+    if (sceneIndex !== -1) {
+      project.scenes[sceneIndex] = sceneObj;
+      localStorage.setItem('writingProject', JSON.stringify(project));
+    }
+  };
+}
 
 testSheetDB();
 
@@ -178,7 +196,7 @@ function editScene(index) {
 }
 
 // Save Scene
-function saveScene() {
+export function saveScene(scene) {
   if (!activeProject || activeSceneIndex === null) return;
 
   const sceneTitle = document.getElementById("scene-title").textContent;

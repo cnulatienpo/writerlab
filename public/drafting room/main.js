@@ -24,6 +24,19 @@ async function testSheetDB() {
     console.error("Error saving to sheet:", err.message);
   }
 }
+// Attach to window for global access
+if (typeof window !== 'undefined') {
+  window.saveScene = saveScene;
+}
+
+// Stub for displayFeedback if not defined
+if (typeof window !== 'undefined' && typeof window.displayFeedback === 'undefined') {
+  window.displayFeedback = function(feedback, analysis) {
+    console.log('LLM Feedback:', feedback);
+    console.log('Analysis:', analysis);
+    alert('Feedback: ' + feedback);
+  };
+}
 
 testSheetDB();
 

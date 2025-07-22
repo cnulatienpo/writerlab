@@ -46,3 +46,19 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Global displayFeedback function for non-module use
+export function displayFeedback(feedback, analysis) {
+  // Example: render feedback and analysis to the UI
+  const feedbackEl = document.getElementById('feedback-output');
+  if (feedbackEl) {
+    feedbackEl.innerHTML = `<h3>LLM Feedback</h3><pre>${typeof feedback === 'string' ? feedback : JSON.stringify(feedback, null, 2)}</pre>`;
+    if (analysis) {
+      feedbackEl.innerHTML += `<h3>Analysis</h3><pre>${JSON.stringify(analysis, null, 2)}</pre>`;
+    }
+  } else {
+    // Fallback: log to console
+    console.log('LLM Feedback:', feedback);
+    console.log('Analysis:', analysis);
+  }
+};

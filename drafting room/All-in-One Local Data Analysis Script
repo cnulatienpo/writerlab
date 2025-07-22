@@ -12,6 +12,10 @@ function getAverageSentenceLength(text) {
   const totalWords = sentences.reduce((sum, s) => sum + s.trim().split(/\s+/).filter(w => w).length, 0);
   return +(totalWords / sentences.length).toFixed(2);
 }
+// Attach to window for global access
+if (typeof window !== 'undefined') {
+  window.runAllDataAnalysis = runAllDataAnalysis;
+}
 
 function getWordCount(text) {
   return text.trim().split(/\s+/).filter(w => w).length;
@@ -112,7 +116,7 @@ function getCharacterMap(text) {
 }
 
 // --- Main Data Analysis Function ---
-function runAllDataAnalysis(text) {
+export function runAllDataAnalysis(text) {
   return {
     telemetry: {
       avgSentenceLength: getAverageSentenceLength(text),
