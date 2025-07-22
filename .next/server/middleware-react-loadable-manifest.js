@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"pages/definitions/[slug].js -> ../../public/drafting-room/RayRayChatbot\":{\"id\":\"pages/definitions/[slug].js -> ../../public/drafting-room/RayRayChatbot\",\"files\":[\"static/chunks/_pages-dir-browser_public_drafting-room_RayRayChatbot_js.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{}"
