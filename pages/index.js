@@ -102,12 +102,32 @@ export default function Home() {
               border: '2px solid #f4f4f4',
               borderRadius: 8,
               padding: '1.5rem 1rem',
-              transition: 'background 0.2s'
+              transition: 'background 0.2s',
+              marginBottom: '2rem'
             }}
           >
             <strong>Drafting Room</strong>
             <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
               Open the interactive scene builder and feedback tools.
+            </div>
+          </a>
+
+          <a
+            href="/deviousness"
+            className="tile"
+            style={{
+              textAlign: 'center',
+              textDecoration: 'none',
+              color: '#f4f4f4',
+              border: '2px solid #f4f4f4',
+              borderRadius: 8,
+              padding: '1.5rem 1rem',
+              transition: 'background 0.2s'
+            }}
+          >
+            <strong>Literary Deviousness</strong>
+            <div style={{ fontSize: '0.9rem', marginTop: '0.5rem', opacity: 0.8 }}>
+              Explore the full set of literary devices, narration, and writing tools.
             </div>
           </a>
         </div>

@@ -38,7 +38,7 @@ export default function RayRayChatbot() {
       </button>
       {open && (
         <div style={{ position: 'absolute', bottom: '70px', right: 0, width: '350px', background: '#222', color: '#fff', borderRadius: '1rem', boxShadow: '0 2px 16px #000a', padding: '1rem' }}>
-          <h3>Ray Ray Chatbot</h3>
+          <h3>Ask Ray Ray</h3>
           <div style={{ maxHeight: '250px', overflowY: 'auto', marginBottom: '1rem', fontSize: '1rem' }}>
             {messages.map((msg, i) => (
               <div key={i} style={{ marginBottom: '0.5rem', textAlign: msg.role === 'user' ? 'right' : 'left' }}>
