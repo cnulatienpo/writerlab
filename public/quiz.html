@@ -3,52 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="/quiz-embed.js"></script>
-  questions.forEach((q,i)=>{
-    const qDiv=document.createElement('div'); qDiv.className='question';
-    const qTitle=document.createElement('h3'); qTitle.textContent=q.question; qDiv.appendChild(qTitle);
-    const ansDiv=document.createElement('div'); ansDiv.className='answers';
-    q.answers.forEach((a,idx)=>{
-      const id=`q${i}_a${idx}`;
-      const label=document.createElement('label');
-      const input=document.createElement('input');
-      input.type='radio'; input.name=`q${i}`; input.value=idx+1; input.id=id;
-      label.appendChild(input); label.append(' '+a);
-      ansDiv.appendChild(label);
-    });
-    qDiv.appendChild(ansDiv); quizDiv.appendChild(qDiv);
-  });
-  document.getElementById('submitBtn').onclick=()=>{
-    const selections=[...document.querySelectorAll('input[type=radio]:checked')];
-    if(selections.length!==questions.length){alert('Please answer all questions.');return;}
-    const counts={};
-    selections.forEach(s=>{counts[s.value]=(counts[s.value]||0)+1;});
-    const max=Math.max(...Object.values(counts));
-    const winners=Object.keys(counts).filter(k=>counts[k]===max);
-    const resultDiv=document.getElementById('result');
-    resultDiv.innerHTML='';
-    if(winners.length>1){
-      resultDiv.classList.remove('hidden');
-      const p=document.createElement('p');
-      p.textContent='Tie! Choose your writer type:';
-      resultDiv.appendChild(p);
-      winners.forEach(num=>{
-        const type=answerKey[num];
-        const btn=document.createElement('button');
-        btn.textContent=type; btn.onclick=()=>showResult(type);
-        resultDiv.appendChild(btn);
-      });
-    } else {
-      showResult(answerKey[winners[0]]);
-    }
-    function showResult(type){
-      const slug=type.split(/[\s/]/)[0].toLowerCase();
-      // Save writer type to localStorage for Ray Ray personalization
-      localStorage.setItem('writerType', slug);
-      window.location.href=`/profile/${slug}`;
-    }
-  };
-})();
-</script>
+<title>Writer Type Quiz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap">
+<style>
+  body {
+    background: #111;
+    color: #f4f4f4;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+  }
+  h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #f4f4f4;
+  }
+  .intro {
+    max-width: 700px;
+    margin-bottom: 2.5rem;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #f4f4f4;
+    text-align: center;
+  }
+  #quiz-container h3 {
+    color: #e53935;
+  }
+  #quiz-container, #quiz-questions, #quiz-result, #quiz-container p, #quiz-container label, #quiz-container button {
+    color: #f4f4f4;
+  }
+</style>
+</head>
+<body>
+  <h1>Find Your Writer Type</h1>
+  <div class="intro">
+    <p>No, I don’t think you’re a type. I’m not gonna go all Jungian archetype on you.<br>
+    It's just that no one writes the same or learns the same. And if you're gonna learn, you gotta learn in your own language, in your own way. So I came up with some writer types, and made a quiz out of it. If you take it, it will give you a profile and then it will tell Ray Ray about it, and when he talks to you, he'll do his best to frame it in the style you work in the best. It's all just one big creative writing exercise, and it only works if you play along.</p>
+  </div>
+  <script src="/quiz-embed.js"></script>
+</body>
+</html>
 </body>
 </html>
