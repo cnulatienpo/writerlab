@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Drafting Room – Writer Lab</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap">
-  <link rel="stylesheet" href="js/drafting-room.css" />
+  <link rel="stylesheet" href="drafting-room/style.css" />
 </head>
 <body>
   <!-- Scene Navigation Sidebar -->
@@ -121,8 +121,8 @@
       <h3>🤖 Ray Ray's Feedback</h3>
       <div id="feedback-content">Ask Ray Ray for feedback on your scenes!</div>
       <div id="save-controls">
-        <button onclick="saveTextFeedback(currentProject, { scene: getCurrentSceneTitle(), content: latestRayRayReply })">💾 Save Feedback</button>
-        <button onclick="saveVisualizerImage('drafting-room-' + Date.now())">🖼️ Save Visual Snapshot</button>
+        <button id="saveTextBtn">💾 Save Feedback</button>
+        <button id="saveImageBtn">🖼️ Save Visual Snapshot</button>
       </div>
     </div>
   </div>
@@ -142,8 +142,20 @@
     </div>
   </div>
 
-  <script src="js/save-feedback.js"></script>
-  <script src="js/drafting-room.js"></script>
+  <script src="drafting-room/main.js"></script>
+  <script src="drafting-room/scene-fetch.js"></script>
+  <script src="drafting-room/scene-select.js"></script>
+  <script src="drafting-room/scene-list-render.js"></script>
+  <script src="drafting-room/layer-toggle.js"></script>
+  <script src="drafting-room/toggle-layers.js"></script>
+  <script src="drafting-room/redraw.js"></script>
+  <script src="drafting-room/redraw-analysis.js"></script>
+  <script src="drafting-room/analysis-utils.js"></script>
+  <script src="drafting-room/save-feedback.js"></script>
+  <script src="drafting-room/telemetry.js"></script>
+  <script src="drafting-room/rayray-ui.js"></script>
+  <script src="drafting-room/rayray-send.js"></script>
+  <script src="drafting-room/rayray-llm.js"></script>
   <script src="js/storyHeatmap.js" type="module"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/tensionCurve.js" type="module"></script>
