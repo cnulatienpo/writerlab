@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "next dev",
+    "dev": "nodemon server.js",
+    "next": "next dev",
     "build": "next build",
     "start": "next start"
   },
@@ -26,5 +27,8 @@
     "react-dom": "^19.1.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
